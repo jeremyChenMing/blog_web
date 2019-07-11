@@ -1,0 +1,30 @@
+
+@import '../../less/Index.less';
+
+@media screen and (min-width: @screen-md-min) {
+	.wBox{
+		width: 450px;
+		text-shadow: 4px 4px 10px lighten(@color, 10%);
+		overflow: hidden;
+		position: fixed;
+		bottom: 45%;
+		right: 10%;
+		font-size: 40px;
+		letter-spacing: 2px;
+		color: @color;
+	}	
+}
+
+// 移动端
+@media screen and (max-width: @screen-md-min) {
+	.wBox{
+		width: 90%;
+		overflow: hidden;
+		text-align: center;
+		font-size: 30px;
+		margin: 100px auto 10px;
+		color: @color;
+		text-shadow: 4px 4px 10px lighten(@color, 10%);
+	}
+
+}

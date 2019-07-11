@@ -1,0 +1,67 @@
+@font-size-base: 14px;
+@theme-color: #2584bd;
+@theme: #F08E1C;
+@heading-color: rgba(0,0,0,.85);
+@black: #000;
+@red-6: #f5222d;
+@green-6: #52c41a;
+
+@border-color-split: hsv(0, 0, 91%);
+@text-color-secondary: fade(@black, 45%);
+@text-color: fade(@black, 65%);
+
+// Extra small screen / phone
+@screen-xs: 480px;
+@screen-xs-min: @screen-xs;
+
+// Small screen / tablet
+@screen-sm: 576px;
+@screen-sm-min: @screen-sm;
+
+// Medium screen / desktop
+@screen-md: 768px;
+@screen-md-min: @screen-md;
+
+// Large screen / wide desktop
+@screen-lg: 992px;
+@screen-lg-min: @screen-lg;
+
+// Extra large screen / full hd
+@screen-xl: 1200px;
+@screen-xl-min: @screen-xl;
+
+// 用于计算px --> rem
+@base: 37.5rem;
+.pxTorem(@name, @num) {
+  @{name}: @num / @base;
+}
+
+
+// utils
+.clearfix() {
+  zoom: 1;
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+  &:after {
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
+}
+
+// 背景双倍图
+.background-image-2x(@name;@ext:png) {
+  background-image: url('../assets/@{name}.@{ext}');
+  background-image: image-set(url('../assets/@{name}@2x.@{ext}') 2x);
+}
+
+.background-image-2x-icon(@name;@ext:png) {
+  background-image: url('../assets/icon/@{name}.@{ext}');
+  background-image: image-set(url('../assets/icon/@{name}@2x.@{ext}') 2x);
+}
+
+

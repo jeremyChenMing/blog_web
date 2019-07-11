@@ -1,0 +1,193 @@
+@import '../../less/Index.less';
+
+.blogBox{
+	width: 1024px;
+	margin: 0 auto;
+	.title{
+		line-height: 90px;
+		text-align: center;
+		font-size: 20px;
+		color: #000;
+		font-weight: bolder;
+	}
+	& > h1{
+		text-align: center;
+		line-height: 90px;
+		position: relative;
+		& > img{
+			height: 40px;
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			cursor: pointer;
+			z-index: 1;
+		}
+	}
+}
+.page{
+	text-align: center;
+	& > ul{
+		display: inline-block;
+	}
+}
+
+.header{
+	display: flex;
+	align-items: center;
+	border-bottom: 1px dashed #ccc;
+	padding: 0 10px 5px;
+	img{
+		cursor: pointer;
+	}
+	div{
+		color: rgba(0,0,0,.4);
+		font-size: 12px;
+	}
+	.left{
+		flex: 1;
+	}
+	.right{
+		& > span{
+			padding: 0 5px;
+		}
+		& > img{
+			height: 30px;
+			border-radius: 50%;
+		}
+	}
+}
+.content{
+	padding: 20px 0;
+	min-height: 400px;
+	p{
+		text-indent: 2em;
+		line-height: 26px;
+		margin-bottom: 10px;
+	}
+}
+.btn{
+	text-align: center;
+	padding: 20px;
+}
+
+.list{
+
+	.cell{
+		padding: 20px;
+		margin-bottom: 20px;
+		cursor: pointer;
+		box-shadow: 0 0 10px rgba(0,0,0,0);
+		transition: box-shadow ease-in .3s, border ease-in .3s;
+		border-bottom: 1px solid rgba(0,0,0,.1);
+		& > h3{
+			font-size: 20px;
+		}
+		.footer{
+			display: flex;
+			align-items: center;
+			font-size: 12px;
+			.left{
+				flex: 1;
+				color: rgba(0,0,0,.5);
+			}
+			.right{
+
+			}
+		}
+		&:hover{
+			box-shadow: 0 0 10px rgba(0,0,0,.2);
+			border-bottom: 1px solid transparent;
+		}
+	}
+}
+.filter{
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+	& > div{
+		flex: 1;
+	}
+	.left{
+
+	}
+	.right{
+
+	}
+}
+
+
+
+.formBox{
+	padding: 40px;
+}
+
+
+.commentBox{
+	padding: 20px 0;
+	.btns{
+		text-align: right;
+		padding: 20px 0;
+		border-bottom: 1px dashed rgba(0,0,0,.1);
+	}
+	.commentList{
+		padding: 20px;
+		ul{
+			width: 100%;
+			li{
+				display: flex;
+				margin-bottom: 20px;
+			}
+			.left{
+				& > img{
+					height: 40px;
+					border-radius: 50%;
+					cursor: pointer;
+				}
+			}
+			.right{
+				flex: 1;
+				padding-left: 10px;
+				& > p{
+					font-size: 14px;
+					line-height: 22px;
+				}
+				& > p:nth-child(1){
+					& > span{
+						font-size: 12px;
+						color: rgba(0,0,0,.4);
+					}
+				}
+				& > p:nth-child(2){
+					
+				}
+			}
+		}
+	}
+	.replyAction{
+		color: @theme-color;
+		cursor: pointer;
+	}
+	.replyBox{
+		margin-top: 8px;
+		.text{
+			vertical-align: middle;
+			display: inline-block;
+			width: 90%;
+		}
+		.acs{
+			vertical-align: middle;
+			margin-left: 10px;
+			font-size: 12px;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
