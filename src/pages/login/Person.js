@@ -4,26 +4,22 @@ import Link from 'umi/link';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { AVATAR, DEFAULT } from '@/constants/Constants'
-import { getUserDetail, updateUser, getUserArticals } from '@/services/api';
-import { Row, Col, Form, Input, AutoComplete, Button, notification, Upload, Icon, Popconfirm } from 'antd';
+import { getUserDetail, updateUser, getUserArticals, commentUser } from '@/services/api';
+import { Row, Col, Form, Input, AutoComplete, Button, notification, Upload, Icon, Popconfirm, Tabs } from 'antd';
 const AutoCompleteOption = AutoComplete.Option;
-
-// function getBase64(img, callback) {
-// 	const reader = new FileReader();
-// 	reader.addEventListener('load', () => callback(reader.result));
-// 	reader.readAsDataURL(img);
-// }
+const { TabPane } = Tabs;
 
 function beforeUpload(file) {
-	const isJPG = file.type === 'image/jpeg';
-	if (!isJPG) {
-		console.log('You can only upload JPG file!');
-	}
+	// const isJPG = file.type === 'image/jpeg';
+	// if (!isJPG) {
+	// 	console.log('You can only upload JPG file!');
+	// }
 	const isLt2M = file.size / 1024 / 1024 < 2;
 	if (!isLt2M) {
 		console.log('Image must smaller than 2MB!');
 	}
-	return isJPG && isLt2M;
+	return isLt2M
+	// return isJPG && isLt2M;
 }
 
 @connect(({ login, loading }) => ({
@@ -44,6 +40,10 @@ class Person extends React.Component {
 			count: 0,
 			items: [],
 		},
+		comments: {
+			count: 0,
+			items: []
+		},
 		loading: false,
 		data: {},
 	};
@@ -60,7 +60,6 @@ class Person extends React.Component {
 					phone: data.phone,
 					web_site: data.web_site,
 				});
-				console.log(data)
 				this.setState({
 					data: data,
 					imageUrl: data.avatar
@@ -75,9 +74,18 @@ class Person extends React.Component {
 				});
 			}
 		});
+		
+		commentUser({user_id: message.id}).then(data => {
+			if (data && !data.code) {
+				this.setState({
+					comments: data,
+				});
+			}
+		});
+
 	}
 	handleSubmit = e => {
-		const { message } = this.props;
+		const { message, dispatch } = this.props;
 		e.preventDefault();
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (!err) {
@@ -88,6 +96,20 @@ class Person extends React.Component {
 						notification.success({
 							message: '保存信息成功！',
 						});
+						dispatch({
+							type: 'login/changeLoginStatus',
+							payload: {
+								...message,
+								avatar: this.state.imageUrl
+							}
+						})
+						dispatch({
+							type: 'login/saveCurrentUser',
+							payload: {
+								...message,
+								avatar: this.state.imageUrl
+							}
+						})
 					} else {
 						notification.error({
 							message: '保存信息失败！',
@@ -142,7 +164,7 @@ class Person extends React.Component {
 		}
 		if (info.file.status === 'done') {
 			// Get this url from response in real world.
-			console.log(info)
+			// console.log(info)
 			// getBase64(info.file.originFileObj, imageUrl =>
 			// 	this.setState({
 			// 		imageUrl,
@@ -158,9 +180,6 @@ class Person extends React.Component {
 			}
 		}
 	};
-
-
-
 
 	confirm = () => {
 		const {
@@ -187,8 +206,9 @@ class Person extends React.Component {
 		});
 	};
 	render() {
-		const { fields, list, imageUrl } = this.state;
+		const { fields, list, imageUrl, comments } = this.state;
 		const { loading } = this.props;
+		console.log(comments)
 		return (
 			<div className={l.personBox}>
 				<div className={l.avatarBox}>
@@ -230,34 +250,69 @@ class Person extends React.Component {
 					</Row>
 				</Form>
 
-				<div className={l.articals}>
-					<h3>
-						发表过的文章 <span>{list.total}</span> 篇
-					</h3>
-					<ul className={l.list}>
-						{list.items.map(item => {
-							return (
-								<li key={item.id}>
-									<div>
-										<Link to={`/detail?id=${item.id}`}>{item.title}</Link>
-									</div>
-									<div>
-										<span className={l.read}>阅读数：{item.hots}</span>
-										<Link to={`/add?id=${item.id}`}><Icon className={l.actionIcon} type="form" /></Link>
-										<Popconfirm
-											title="确认删除吗？一旦删除将不可恢复！"
-											okText="确认"
-											cancelText="取消"
-											onConfirm={this.confirm.bind(null, item.id)}
-										>
-											<Icon className={l.actionIcon} type="delete" />
-										</Popconfirm>
-									</div>
-								</li>
-							);
-						})}
-					</ul>
-				</div>
+				<Tabs defaultActiveKey="1" style={{textAlign: 'left'}}>
+					<TabPane key="1" tab={<span><Icon type="apple" />文章</span>}>
+						<div className={l.articals}>
+							<h3>
+								共有 <span>{list.count}</span> 篇文章
+							</h3>
+							<ul className={l.list}>
+								{list.items.map(item => {
+									return (
+										<li key={item.id}>
+											<div>
+												<Link to={`/detail?id=${item.id}`}>{item.title}</Link>
+											</div>
+											<div>
+												<span className={l.read}>阅读数：{item.hots}</span>
+												<Link to={`/add?id=${item.id}`}><Icon className={l.actionIcon} type="form" /></Link>
+												<Popconfirm
+													title="确认删除吗？一旦删除将不可恢复！"
+													okText="确认"
+													cancelText="取消"
+													onConfirm={this.confirm.bind(null, item.id)}
+												>
+													<Icon className={l.actionIcon} type="delete" />
+												</Popconfirm>
+											</div>
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					</TabPane>
+					<TabPane key="2" tab={<span><Icon type="apple" />评论</span>}>
+						<div className={l.articals}>
+							<h3>
+								共有 <span>{comments.count}</span> 条评论
+							</h3>
+							<ul className={l.list}>
+								{[].map(item => {
+									return (
+										<li key={item.id}>
+											<div>
+												<Link to={`/detail?id=${item.id}`}>{item.title}</Link>
+											</div>
+											<div>
+												<span className={l.read}>阅读数：{item.hots}</span>
+												<Link to={`/add?id=${item.id}`}><Icon className={l.actionIcon} type="form" /></Link>
+												<Popconfirm
+													title="确认删除吗？一旦删除将不可恢复！"
+													okText="确认"
+													cancelText="取消"
+													onConfirm={this.confirm.bind(null, item.id)}
+												>
+													<Icon className={l.actionIcon} type="delete" />
+												</Popconfirm>
+											</div>
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					</TabPane>
+				</Tabs>
+				
 			</div>
 		);
 	}

@@ -61,7 +61,9 @@
 	text-align: center;
 	padding: 20px;
 	img{
-		height: 100px;
+		// height: 100%;
+		width: 104px;
+		height: 104px;
 	}
 	.content{
 		text-align: left;
@@ -73,6 +75,11 @@
 			.ant-upload.ant-upload-select-picture-card{
 				border-radius: 50%;
 				overflow: hidden;
+				margin-right: 0;
+				margin-bottom: 0;
+			}
+			.ant-upload.ant-upload-select-picture-card > .ant-upload{
+				padding: 0;
 			}
 		};
 	}

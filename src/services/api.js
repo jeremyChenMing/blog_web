@@ -141,6 +141,11 @@ export async function commentList(params) {
   return request(`/blog/comments?${stringify(params)}`);
 }
 
+// 关于个人的评论列表
+export async function commentUser(params) {
+  return request(`/blog/comments_user?${stringify(params)}`);
+}
+
 
 
 

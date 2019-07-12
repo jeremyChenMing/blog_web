@@ -18,7 +18,7 @@ class Detail extends React.Component {
 	state = {
 		showId: undefined,
 		word: undefined,
-		replyValue: undefined
+		replyValue: undefined,
 	};
 	componentDidMount() {
 		const {
@@ -85,6 +85,9 @@ class Detail extends React.Component {
 						payload: { artical_id: query.id },
 						callback: () => {},
 					});
+					this.setState({
+						word: undefined
+					})
 				} else {
 					notification.error({
 						message: data.msg,
@@ -94,24 +97,60 @@ class Detail extends React.Component {
 		});
 	};
 
-
-
-
 	handleShow = id => {
 		this.setState({
 			showId: id,
-			replyValue: undefined
-		})
+			replyValue: undefined,
+		});
 	};
+
 	changeReply = e => {
 		this.setState({
-			replyValue: e.target.value
-		})
-	}
+			replyValue: e.target.value,
+		});
+	};
+
 	handleReply = obj => {
+		const {
+			message,
+			blog: { detail },
+			dispatch,
+			location: { query },
+		} = this.props;
 		const { replyValue } = this.state;
-		console.log(obj, replyValue)
-	}
+		console.log(obj, replyValue);
+
+		if (!message.id) {
+			// 没有登录，先去登陆
+			router.push('/login');
+			return;
+		}
+		dispatch({
+			type: 'comment/create',
+			payload: {
+				word: replyValue,
+				belong_artical: detail.id,
+				belong_user: message.id,
+				to_comment: obj.id
+			},
+			callback: data => {
+				if (data && !data.code) {
+					dispatch({
+						type: 'comment/list',
+						payload: { artical_id: query.id },
+						callback: () => {},
+					});
+					this.setState({
+						showId: undefined
+					})
+				} else {
+					notification.error({
+						message: data.msg,
+					});
+				}
+			},
+		});
+	};
 	render() {
 		const {
 			blog: { detail },
@@ -170,7 +209,6 @@ class Detail extends React.Component {
 					<div className={l.commentList}>
 						<ul>
 							{list.map(item => {
-								// console.log(item.belong_user.avatar)
 								return (
 									<li key={item.id}>
 										<div className={l.left}>
@@ -196,6 +234,27 @@ class Detail extends React.Component {
 											<span onClick={this.handleShow.bind(null, item.id)} className={l.replyAction}>
 												回复
 											</span>
+											{
+												item.comment_children && item.comment_children.length > 0
+												? <div className={l.secComments}>
+													{
+														item.comment_children.map( k => {
+															return <div className={l.li} key={k.id}>
+																<p>
+																	{k.belong_user ? k.belong_user.nickname : ''}{' '}
+																	<span>
+																		{k.created_at
+																			? moment(k.created_at).format('YYYY-MM-DD HH:mm')
+																			: ''}
+																	</span>
+																</p>
+																<p>{k.word}</p>
+															</div>
+														})
+													}
+												</div>
+												: null
+											}
 											{item.id === this.state.showId && (
 												<div className={l.replyBox}>
 													<TextArea
@@ -205,7 +264,12 @@ class Detail extends React.Component {
 														placeholder="请输入回复内容"
 														autosize={{ minRows: 2, maxRows: 4 }}
 													/>
-													<Button onClick={this.handleReply.bind(null, item)} size="small" className={l.acs} type="primary">
+													<Button
+														onClick={this.handleReply.bind(null, item)}
+														size="small"
+														className={l.acs}
+														type="primary"
+													>
 														添加回复
 													</Button>
 												</div>

@@ -137,10 +137,16 @@
 			li{
 				display: flex;
 				margin-bottom: 20px;
+				padding-bottom: 20px;
+				border-bottom: 1px solid rgba(0,0,0,.05);
+			}
+			li:last-child{
+				border-bottom: none;
 			}
 			.left{
 				& > img{
 					height: 40px;
+					width: 40px;
 					border-radius: 50%;
 					cursor: pointer;
 				}
@@ -155,6 +161,7 @@
 				& > p:nth-child(1){
 					& > span{
 						font-size: 12px;
+						margin-left: 10px;
 						color: rgba(0,0,0,.4);
 					}
 				}
@@ -170,16 +177,42 @@
 	}
 	.replyBox{
 		margin-top: 8px;
+		padding: 0 30px;
+		align-items: center;
+		display: flex;
 		.text{
-			vertical-align: middle;
-			display: inline-block;
-			width: 90%;
+
 		}
 		.acs{
-			vertical-align: middle;
 			margin-left: 10px;
-			font-size: 12px;
 		}
+	}
+}
+.secComments{
+	padding: 0 30px;
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	margin-top: 8px;
+	.li{
+		padding: 5px 0;
+		border-bottom: 1px dashed rgba(0,0,0,.1);
+		& > p{
+			font-size: 12px;
+			line-height: 20px;
+		}
+		& > p:nth-child(1){
+			& > span{
+				font-size: 12px;
+				color: rgba(0,0,0,.4);
+				margin-left: 10px;
+			}
+		}
+		& > p:nth-child(2){
+			
+		}
+	}
+	.li:last-child{
+		border-bottom: none;
 	}
 }
 

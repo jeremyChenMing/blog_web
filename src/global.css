@@ -17,7 +17,7 @@ li {
 }
 html, body, #root {
   height: 100%;
-  background-color: #f5f5f5;
+  background-color: #fff;
 }
 
 body, p, ul, h1, h2, h3, h4, h5, h6 {

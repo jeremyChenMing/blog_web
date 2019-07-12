@@ -52,7 +52,6 @@ export default {
     },
     *create({ payload, callback }, { call, put }) {
       const response = yield call(registerUser, payload);
-
       if (response.code) {
         callback(response)
       }else{
