@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import l from './Index.less';
-// import Link from 'umi/link';
+import Link from 'umi/link';
 import moment from 'moment';
 import router from 'umi/router';
 import { CLASSIFIYOBJS, AVATAR, DEFAULT } from '@/constants/Constants';
@@ -151,6 +151,36 @@ class Detail extends React.Component {
 			},
 		});
 	};
+
+
+
+	handleNice = (bool) => {
+		const { dispatch, message, blog: { detail }, location: { query }, } = this.props;
+		console.log(bool)
+		dispatch({
+			type: 'blog/nice',
+			payload: {
+				action: bool === '已赞' ? 'unlike' : 'like',
+				user_id: message.id,
+				artical_id: detail.id,
+			},
+			callback: (data) => {
+				if (data && !data.code) {
+					dispatch({
+						type: 'blog/details',
+						payload: { id: query.id },
+						callback: () => {},
+					});
+				}
+			}
+		})
+	}
+	renderNice = (objs) => {
+		const {message} = this.props;
+		const arr = objs.user_like || [];
+		const has = arr.map( item => item.id === message.id)
+		return has[0] ? '已赞' : '赞'
+	}
 	render() {
 		const {
 			blog: { detail },
@@ -170,22 +200,23 @@ class Detail extends React.Component {
 						</span>
 						&nbsp;&nbsp;&nbsp;&nbsp;
 						<span>
-							更新时间：
-							{detail.updated_at ? moment(detail.updated_at).format('YYYY-MM-DD HH:mm') : ''}
+							类别：
+							{CLASSIFIYOBJS[detail.classify]}
+						</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span>
+							点赞数：
+							{detail.nices}
 						</span>
 						&nbsp;&nbsp;&nbsp;&nbsp;
 						<span>
 							阅读数：
 							{detail.hots}
 						</span>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<span>
-							类别：
-							{CLASSIFIYOBJS[detail.classify]}
-						</span>
+						
 					</div>
 					<div className={l.right}>
-						<span>作者：{detail.user ? detail.user.nickname : ''}</span>
+						<span>作者：<Link to={`/people/${detail.user ? detail.user.id : ''}`}> {detail.user ? detail.user.nickname : ''}</Link></span>
 						<img
 							src={detail.user && detail.user.avatar ? `${AVATAR}${detail.user.avatar}` : DEFAULT}
 							alt="auth"
@@ -193,7 +224,10 @@ class Detail extends React.Component {
 					</div>
 				</div>
 				<div className={l.content}>{this.renderDetail(detail.content)}</div>
-
+				<div className={l.funBox}>
+					<Button onClick={this.handleNice.bind(null, this.renderNice(detail))}>{this.renderNice(detail)} | {detail.user_like ? detail.user_like.length : 0}</Button>
+					<Button style={{marginLeft: 20}}>收藏 | 23</Button>
+				</div>
 				<div className={l.commentBox}>
 					<TextArea
 						onChange={this.handleTextarea}

@@ -148,5 +148,11 @@ export async function commentUser(params) {
 
 
 
-
+// 创建评论 create_comment
+export async function handleNice(params) {
+  return request(`/blog/handle_nice`, {
+    method: 'POST',
+    body: params,
+  });
+}
 

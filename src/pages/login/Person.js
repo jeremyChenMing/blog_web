@@ -1,6 +1,7 @@
 import React from 'react';
 import l from './Login.less';
 import Link from 'umi/link';
+import moment from 'moment'
 import { connect } from 'dva';
 import router from 'umi/router';
 import { AVATAR, DEFAULT } from '@/constants/Constants'
@@ -250,7 +251,7 @@ class Person extends React.Component {
 					</Row>
 				</Form>
 
-				<Tabs defaultActiveKey="1" style={{textAlign: 'left'}}>
+				<Tabs defaultActiveKey="2" style={{textAlign: 'left'}}>
 					<TabPane key="1" tab={<span><Icon type="apple" />文章</span>}>
 						<div className={l.articals}>
 							<h3>
@@ -286,25 +287,18 @@ class Person extends React.Component {
 							<h3>
 								共有 <span>{comments.count}</span> 条评论
 							</h3>
-							<ul className={l.list}>
-								{[].map(item => {
+							<ul className={l.commentlist}>
+								{comments.items.map(item => {
 									return (
 										<li key={item.id}>
-											<div>
-												<Link to={`/detail?id=${item.id}`}>{item.title}</Link>
-											</div>
-											<div>
-												<span className={l.read}>阅读数：{item.hots}</span>
-												<Link to={`/add?id=${item.id}`}><Icon className={l.actionIcon} type="form" /></Link>
-												<Popconfirm
-													title="确认删除吗？一旦删除将不可恢复！"
-													okText="确认"
-													cancelText="取消"
-													onConfirm={this.confirm.bind(null, item.id)}
-												>
-													<Icon className={l.actionIcon} type="delete" />
-												</Popconfirm>
-											</div>
+											<span>{item.word}</span>
+											{
+												item.to_comment ?
+												<Link to={`/people/${item.to_comment_dict.id}`}><span className={l.people}>@{item.to_comment_dict ? item.to_comment_dict.nickname : ''}</span></Link>
+												: null
+											}
+											<span className={l.time}>{item.created_at ? moment(item.created_at).format('YYYY-MM-DD HH:mm') : ''}</span>
+											<p className={l.arts}><Link to={`/detail?id=${item.belong_artical.id}`}>{item.belong_artical ? item.belong_artical.title : ''}</Link></p>
 										</li>
 									);
 								})}

@@ -4,9 +4,10 @@ import l from './Index.less';
 import Link from 'umi/link';
 import moment from 'moment';
 import { CLASSIFIY } from '@/constants/Constants'
+import { deepClone } from '@/utils/common'
 import Empty from '@/components/widget/Empty'
-import { Pagination, Button, Icon, Dropdown, Menu, Spin } from 'antd';
-const ButtonGroup = Button.Group;
+import { Pagination, Button, Icon, Dropdown, Menu, Spin, Radio } from 'antd';
+// const ButtonGroup = Button.Group;
 
 @connect(({ blog, loading }) => ({
 	blog,
@@ -16,13 +17,15 @@ class List extends React.Component {
 	state = {
 		classifiy: CLASSIFIY,
 		classIndex: CLASSIFIY[0].value,
-		time: 'down',
-		hot: 'down'
+		// time: 'down',
+		// hot: 'down',
+		// nice: 'down',
+		// group: 'time'
 	};
 	componentDidMount() {
 		const {
 			dispatch,
-			blog: { list },
+			// blog: { list },
 		} = this.props;
 		dispatch({
 			type: 'blog/list',
@@ -32,7 +35,7 @@ class List extends React.Component {
 	changePage = (page, page_size) => {
 		const {
 			dispatch,
-			blog: { list },
+			// blog: { list },
 		} = this.props;
 		dispatch({
 			type: 'blog/list',
@@ -45,23 +48,30 @@ class List extends React.Component {
 
 
 	handle = (type, value) => {
-		const {
-			dispatch,
-			blog: { list: {query} },
-		} = this.props;
-
-		this.setState({
-			[type]: value === 'down' ? 'up' : 'down'
-		}, () => {
-			dispatch({
-				type: 'blog/list',
-				payload: {
-					...query,
-					page: 1,
-					[type]: this.state[type]
-				},
-			});
+		const { dispatch } = this.props;
+		let copy = deepClone(this.props.blog.list.query)
+		copy[type] = value === 'down' ? 'up' : 'down';
+		copy['group'] = type
+		dispatch({
+			type: 'blog/list',
+			payload: {
+				...copy,
+				page: 1
+			}
 		})
+		// this.setState({
+		// 	[type]: value === 'down' ? 'up' : 'down'
+		// }, () => {
+		// 	dispatch({
+		// 		type: 'blog/list',
+		// 		payload: {
+		// 			...query,
+		// 			page: 1,
+		// 			group: this.state.group,
+		// 			[type]: this.state[type]
+		// 		},
+		// 	});
+		// })
 	}
 	handleType = ({ key }) => {
 		const {
@@ -82,12 +92,13 @@ class List extends React.Component {
 			});
 		})
 	};
+
 	render() {
 		const {
 			blog: { list, list:{query} },
 			loading
 		} = this.props;
-		const { classifiy, classIndex, hot, time } = this.state;
+		const { classifiy, classIndex } = this.state;
 		const menu = (
 			<Menu onClick={this.handleType}>
 				{
@@ -110,29 +121,35 @@ class List extends React.Component {
 			})
 			return temp;
 		}
+		// console.log(query.time)
 		return (
 			<div className={l.blogBox}>
 				<div className={l.title}>文章列表</div>
 				<div className={l.filter}>
 					<div className={l.left}>
-						<ButtonGroup>
-							<Button onClick={this.handle.bind(null, 'time', time)}>
+						<Radio.Group value={query.group}>
+							<Radio.Button value="time" onClick={this.handle.bind(null, 'time', query.time)}>
 								时间
-								{time === 'down' ? <Icon type="arrow-down" />: <Icon type="arrow-up" />}
-							</Button>
-							<Button onClick={this.handle.bind(null, 'hot', hot)}>
+								{query.time === 'down' ? <Icon type="arrow-down" />: <Icon type="arrow-up" />}
+							</Radio.Button>
+							<Radio.Button value="hot" onClick={this.handle.bind(null, 'hot', query.hot)}>
 								热度
-								{hot === 'down' ? <Icon type="arrow-down" />: <Icon type="arrow-up" />}
-							</Button>
-							<Dropdown overlay={menu}>
-								<Button>
-									{findText(classIndex)}
-									<Icon type="down" />
-								</Button>
-							</Dropdown>
-						</ButtonGroup>
+								{query.hot === 'down' ? <Icon type="arrow-down" />: <Icon type="arrow-up" />}
+							</Radio.Button>
+							<Radio.Button value="nice" onClick={this.handle.bind(null, 'nice', query.nice)}>
+								点赞
+								{query.nice === 'down' ? <Icon type="arrow-down" />: <Icon type="arrow-up" />}
+							</Radio.Button>
+						</Radio.Group>
 					</div>
-					<div className={l.right} />
+					<div className={l.right}>
+						<Dropdown overlay={menu}>
+							<Button value="right">
+								{findText(classIndex)}
+								<Icon type="down" />
+							</Button>
+						</Dropdown>
+					</div>
 				</div>
 				{
 					list.total > 0 ?
@@ -147,9 +164,15 @@ class List extends React.Component {
 										<div className={l.footer}>
 											<div className={l.left}>
 												时间：
-												{item.updated_at ? moment(item.updated_at).format('YYYY-MM-DD HH:mm') : ''}
+												{item.created_at ? moment(item.created_at).format('YYYY-MM-DD HH:mm') : ''}
 											</div>
-											<div className={l.right} />
+											<div className={l.right} >
+												<Icon className={l.ii} type="eye" />
+												{item.hots}
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<Icon className={l.ii} type="like" />
+												{item.user_like ? item.user_like.length : 0}
+											</div>
 										</div>
 									</div>
 								</Link>

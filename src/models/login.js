@@ -2,7 +2,7 @@ import { routerRedux } from 'dva/router';
 // import { stringify } from 'qs';
 import { loginUser, registerUser } from '@/services/api';
 import { 
-  setToken, 
+  // setToken, 
   clear, 
   setUserInfo 
 } from '@/utils/common';

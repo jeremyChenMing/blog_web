@@ -1,6 +1,6 @@
 // import { routerRedux } from 'dva/router';
 // import { stringify } from 'qs';
-import { getBlogList, getBlogDetail, addBlog, deleteBlog, updateBlog } from '@/services/api';
+import { getBlogList, getBlogDetail, addBlog, deleteBlog, updateBlog, handleNice } from '@/services/api';
 import { setToken, setUserInfo } from '@/utils/common';
 
 export default {
@@ -13,6 +13,8 @@ export default {
         page_size: 10,
         time: 'down',
         hot: 'down',
+        nice: 'down',
+        group: 'time',
         word: '',
         classify: ''
       },
@@ -26,18 +28,23 @@ export default {
   },
   effects: {
     *list({ payload }, { call, put, select }) {
-      const query = yield select(state => state.blog.list.query)
-      const response = yield call(getBlogList, {...query, ...payload});
-      console.log(query)
+      const query = yield select(state => state.blog.list.query);
+      let params = {...query, ...payload}
+      let ques = {
+        page: params.page,
+        page_size: params.page_size,
+        word: params.word,
+        classify: params.classify,
+        group: params.group,
+        [params.group]: params[params.group]
+      }
+      const response = yield call(getBlogList, ques);
       if (response && !response.code) {
         yield put({
           type: 'save',
           payload: {
             ...response, 
-            query: {
-              ...query,
-              ...payload
-            }
+            query: params
           },
         });  
       }
@@ -64,6 +71,11 @@ export default {
       const response = yield call(updateBlog, payload, id);
       callback(response)
     },
+    // 点赞
+    *nice({ payload, callback, id }, { call, put }) {
+      const response = yield call(handleNice, payload, id);
+      callback(response)
+    },
     
   },
 
@@ -88,6 +100,12 @@ export default {
       return {
         ...state,
         detail: action.payload,
+      };
+    },
+    query(state, action) {
+      return {
+        ...state,
+        list: {...state.list, query: action.payload},
       };
     },
   },

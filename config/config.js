@@ -10,7 +10,7 @@ const plugins = [
       webpackChunkName: true,
       loadingComponent: './components/PageLoading/Index', 
     },
-    title: '简税ETC销售工具',
+    title: 'blog',
     dll: true,
     locale: {
       enable: true,

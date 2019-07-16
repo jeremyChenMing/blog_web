@@ -17,6 +17,7 @@ export default [
 			{ path: '/add', component: './blog/Add' },
 			{ path: '/password', component: './login/Password' },
 			{ path: '/person', component: './login/Person' },
+			{ path: '/people/:id', component: './blog/People' },
 		]
 	},
 
