@@ -4,9 +4,11 @@ import l from './Index.less';
 import Link from 'umi/link';
 import moment from 'moment';
 import router from 'umi/router';
+import { postFollow } from '@/services/api';
 import { CLASSIFIYOBJS, AVATAR, DEFAULT } from '@/constants/Constants';
-import { Input, Button, notification } from 'antd';
+import { Input, Button, notification, Tag } from 'antd';
 const { TextArea } = Input;
+
 
 @connect(({ blog, login, comment, loading }) => ({
 	blog,
@@ -24,11 +26,15 @@ class Detail extends React.Component {
 		const {
 			dispatch,
 			location: { query },
+			message
 		} = this.props;
 		if (query.id) {
 			dispatch({
 				type: 'blog/details',
-				payload: { id: query.id },
+				payload: { 
+					id: query.id,
+					params: {login_id: message.id} 
+				},
 				callback: () => {},
 			});
 
@@ -181,11 +187,40 @@ class Detail extends React.Component {
 		const has = arr.map( item => item.id === message.id)
 		return has[0] ? '已赞' : '赞'
 	}
+
+
+	handleFollow = (followed, follower) => {
+		const {
+			dispatch,
+			location: { query },
+			message
+		} = this.props;
+		const para = {
+			followed_id: followed.user.id,
+			follower_id: follower.id,
+		}
+		postFollow(para).then( data => {
+			if (data && !data.code) {
+				dispatch({
+					type: 'blog/details',
+					payload: { 
+						id: query.id,
+						params: {login_id: message.id}  
+					},
+					callback: () => {},
+				});
+			}
+		}).catch(err => {
+			console.log(err)
+		})
+	}
 	render() {
 		const {
 			blog: { detail },
 			list,
+			message
 		} = this.props;
+		const selfe = detail.user && detail.user.id !== message.id ? true : false;
 		return (
 			<div className={l.blogBox}>
 				<h1>
@@ -216,17 +251,18 @@ class Detail extends React.Component {
 						
 					</div>
 					<div className={l.right}>
-						<span>作者：<Link to={`/people/${detail.user ? detail.user.id : ''}`}> {detail.user ? detail.user.nickname : ''}</Link></span>
 						<img
 							src={detail.user && detail.user.avatar ? `${AVATAR}${detail.user.avatar}` : DEFAULT}
 							alt="auth"
 						/>
+						<span><Link to={`/people/${detail.user ? detail.user.id : ''}`}> {detail.user ? detail.user.nickname : ''}</Link></span>
+						
+						{selfe ? <Tag onClick={this.handleFollow.bind(null, detail, message)} className={l.tags} color={detail.followed ? 'blue' : ''}>{detail.followed ? '取关' : '关注'}</Tag> : null}
 					</div>
 				</div>
 				<div className={l.content}>{this.renderDetail(detail.content)}</div>
 				<div className={l.funBox}>
 					<Button onClick={this.handleNice.bind(null, this.renderNice(detail))}>{this.renderNice(detail)} | {detail.user_like ? detail.user_like.length : 0}</Button>
-					<Button style={{marginLeft: 20}}>收藏 | 23</Button>
 				</div>
 				<div className={l.commentBox}>
 					<TextArea

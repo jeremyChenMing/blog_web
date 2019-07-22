@@ -51,8 +51,8 @@ export async function getBlogList(params) {
 }
 
 // blog 获取博客详情
-export async function getBlogDetail(id) {
-  return request(`/blog/details/${id}`);
+export async function getBlogDetail(id, params) {
+  return request(`/blog/details/${id}?${stringify(params)}`);
 }
 // blog 增加一条博客
 export async function addBlog(params) {
@@ -154,5 +154,31 @@ export async function handleNice(params) {
     method: 'POST',
     body: params,
   });
+}
+
+
+// 获取个人下的点赞过的文章
+export async function getUserOfNice(id) {
+  return request(`/blog/get_nice/${id}`);
+}
+
+// 关注
+export async function postFollow(params) {
+  return request(`/blog/follow`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
+
+// 获取登录人的粉丝
+export async function getUserOfFan(id) {
+  return request(`/blog/fans/${id}`);
+}
+
+// 获取登录人的关注
+export async function getUserOfFollow(id) {
+  return request(`/blog/followers/${id}`);
 }
 

@@ -5,7 +5,7 @@ import moment from 'moment'
 import { connect } from 'dva';
 import router from 'umi/router';
 import { AVATAR, DEFAULT } from '@/constants/Constants'
-import { getUserDetail, updateUser, getUserArticals, commentUser } from '@/services/api';
+import { getUserDetail, updateUser, getUserArticals, commentUser, getUserOfNice, getUserOfFollow, getUserOfFan } from '@/services/api';
 import { Row, Col, Form, Input, AutoComplete, Button, notification, Upload, Icon, Popconfirm, Tabs } from 'antd';
 const AutoCompleteOption = AutoComplete.Option;
 const { TabPane } = Tabs;
@@ -45,6 +45,18 @@ class Person extends React.Component {
 			count: 0,
 			items: []
 		},
+		nices: {
+			count: 0,
+			items: []
+		},
+		followers: {
+			count: 0,
+			items: []
+		},
+		fans: {
+			count: 0,
+			items: []
+		},
 		loading: false,
 		data: {},
 	};
@@ -81,6 +93,30 @@ class Person extends React.Component {
 				this.setState({
 					comments: data,
 				});
+			}
+		});
+
+		getUserOfNice(message.id).then(data => {
+			if (data && !data.code) {
+				this.setState({
+					nices: data
+				})
+			}
+		});
+
+		getUserOfFollow(message.id).then(data => {
+			if (data && !data.code) {
+				this.setState({
+					followers: data
+				})
+			}
+		});
+
+		getUserOfFan(message.id).then(data => {
+			if (data && !data.code) {
+				this.setState({
+					fans: data
+				})
 			}
 		});
 
@@ -207,7 +243,7 @@ class Person extends React.Component {
 		});
 	};
 	render() {
-		const { fields, list, imageUrl, comments } = this.state;
+		const { fields, list, imageUrl, comments, nices, followers, fans } = this.state;
 		const { loading } = this.props;
 		console.log(comments)
 		return (
@@ -251,7 +287,7 @@ class Person extends React.Component {
 					</Row>
 				</Form>
 
-				<Tabs defaultActiveKey="2" style={{textAlign: 'left'}}>
+				<Tabs defaultActiveKey="4" style={{textAlign: 'left'}}>
 					<TabPane key="1" tab={<span><Icon type="apple" />文章</span>}>
 						<div className={l.articals}>
 							<h3>
@@ -282,7 +318,30 @@ class Person extends React.Component {
 							</ul>
 						</div>
 					</TabPane>
-					<TabPane key="2" tab={<span><Icon type="apple" />评论</span>}>
+					<TabPane key="2" tab={<span><Icon type="apple" />点赞</span>}>
+						<div className={l.articals}>
+							<h3>
+								共有 <span>{nices.count}</span> 篇
+							</h3>
+							<ul className={l.list}>
+								{nices.items.map(item => {
+									return (
+										<li key={item.id}>
+											<div>
+												<Link to={`/detail?id=${item.id}`}>{item.title}</Link>
+											</div>
+											<div>
+												<span className={l.read}>阅读数：{item.hots}</span>
+											</div>
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					</TabPane>
+
+
+					<TabPane key="3" tab={<span><Icon type="apple" />评论</span>}>
 						<div className={l.articals}>
 							<h3>
 								共有 <span>{comments.count}</span> 条评论
@@ -302,6 +361,41 @@ class Person extends React.Component {
 										</li>
 									);
 								})}
+							</ul>
+						</div>
+					</TabPane>
+
+					<TabPane key="4" tab={<span><Icon type="apple" />粉丝</span>}>
+						<div className={l.articals}>
+							<h3>
+								共有 <span>{comments.count}</span> 人
+							</h3>
+							<ul className={l.followers}>
+								{
+									fans.items.map( item => {
+										return <li key={item.id}>
+											<img src={`${AVATAR}${item.follower.avatar}/`} alt=""/>
+											<Link to={`/people/${item.follower.id}`}><span>{item.follower.nickname}</span></Link>
+										</li>
+									})
+								}
+							</ul>
+						</div>
+					</TabPane>
+					<TabPane key="5" tab={<span><Icon type="apple" />关注</span>}>
+						<div className={l.articals}>
+							<h3>
+								共有 <span>{followers.count}</span> 人
+							</h3>
+							<ul className={l.followers}>
+								{
+									followers.items.map( item => {
+										return <li key={item.id}>
+											<img src={`${AVATAR}${item.followed.avatar}/`} alt=""/>
+											<Link to={`/people/${item.followed.id}`}><span>{item.followed.nickname}</span></Link>
+										</li>
+									})
+								}
 							</ul>
 						</div>
 					</TabPane>

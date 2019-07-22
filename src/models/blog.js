@@ -50,7 +50,7 @@ export default {
       }
     },
     *details({ payload, callback }, { call, put }) {
-      const response = yield call(getBlogDetail, payload.id);
+      const response = yield call(getBlogDetail, payload.id, payload.params);
       if (response && !response.code) {
         yield put({
           type: 'detail',
