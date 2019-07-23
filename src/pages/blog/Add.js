@@ -5,12 +5,19 @@ import l from './Index.less';
 // import moment from 'moment'
 import router from 'umi/router';
 import { CLASSIFIY } from '@/constants/Constants'
+// 引入编辑器样式
+import 'braft-editor/dist/index.css'
+import 'braft-editor/dist/output.css'
+// 引入编辑器组件
+import BraftEditor from 'braft-editor'
+
+
 import { Form, Input, Button, notification, Select } from 'antd';
 const { Option } = Select;
 const { TextArea } = Input;
 const formItemLayout = {
 	labelCol: { span: 4 },
-	wrapperCol: { span: 14 },
+	wrapperCol: { span: 20 },
 };
 const buttonItemLayout = {
 	wrapperCol: { span: 14, offset: 4 },
@@ -25,8 +32,8 @@ class Add extends React.Component {
 		fields: [
 			{label: '标题', key: 'title', type: 'text', must: true},
 			{label: '分类', key: 'classify', type: 'select', must: true, data: CLASSIFIY},
-			{label: '内容', key: 'content', type: 'textarea', must: true},
-		]
+			{label: '内容', key: 'content', type: 'editor', must: true},
+		],
 	}
 
 	componentDidMount() {
@@ -42,7 +49,7 @@ class Add extends React.Component {
 				callback: (data) => {
 					setFieldsValue({
 						title: data.title,
-						content: data.content,
+						content: BraftEditor.createEditorState(data.content),
 						classify: data.classify
 					})
 				}	
@@ -58,6 +65,8 @@ class Add extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         values.user_id = this.props.message.id;
+        // values.content = values.content.toHTML()
+        values.content = values.content.toRAW()
         if (query.id) {
         	dispatch({
         		type: 'blog/edit',
@@ -105,9 +114,10 @@ class Add extends React.Component {
   goback = () => {
 		router.goBack();
 	};
+
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { fields } = this.state;
+		const { fields, editorState } = this.state;
 		const {
 			location: { query },
 		} = this.props;
@@ -126,6 +136,12 @@ class Add extends React.Component {
 			      	})
 			      }
 			    </Select>
+			}else if (obj.type === 'editor') {
+				return <BraftEditor
+                className="my-editor"
+                // controls={controls}
+                placeholder="请输入正文内容"
+              />
 			}
 			else{
 				return <Input placeholder="请填写"/>
@@ -145,7 +161,10 @@ class Add extends React.Component {
 								return(
 									<Form.Item key={item.key} label={item.label} {...formItemLayout}>
 										{getFieldDecorator(item.key, {
-					            rules: [{ required: item.must, message: '必填项' }],
+					            rules: [{ 
+					            	required: item.must, 
+					            	message: '必填项' ,
+					            }],
 					          })(
 					          	renderCell(item)
 					          )}

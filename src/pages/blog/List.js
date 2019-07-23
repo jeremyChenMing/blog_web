@@ -15,7 +15,7 @@ import { Pagination, Button, Icon, Dropdown, Menu, Spin, Radio } from 'antd';
 }))
 class List extends React.Component {
 	state = {
-		classifiy: CLASSIFIY,
+		classify: CLASSIFIY,
 		classIndex: CLASSIFIY[0].value,
 		// time: 'down',
 		// hot: 'down',
@@ -82,12 +82,17 @@ class List extends React.Component {
 		this.setState({
 			classIndex: key
 		}, () => {
+			console.log({
+					...query,
+					page: 1,
+					classify: this.state.classIndex
+				})
 			dispatch({
 				type: 'blog/list',
 				payload: {
 					...query,
 					page: 1,
-					classifiy: this.state.classIndex
+					classify: this.state.classIndex
 				},
 			});
 		})
@@ -98,11 +103,11 @@ class List extends React.Component {
 			blog: { list, list:{query} },
 			loading
 		} = this.props;
-		const { classifiy, classIndex } = this.state;
+		const { classify, classIndex } = this.state;
 		const menu = (
 			<Menu onClick={this.handleType}>
 				{
-					classifiy.map( item => {
+					classify.map( item => {
 						if (classIndex !== item.value) {
 							return <Menu.Item key={item.value}>{item.label}</Menu.Item>
 						}else{

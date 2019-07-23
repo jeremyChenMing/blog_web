@@ -5,6 +5,8 @@ import Link from 'umi/link';
 import moment from 'moment';
 import router from 'umi/router';
 import { postFollow } from '@/services/api';
+import 'braft-editor/dist/output.css'
+import BraftEditor from 'braft-editor'
 import { CLASSIFIYOBJS, AVATAR, DEFAULT } from '@/constants/Constants';
 import { Input, Button, notification, Tag } from 'antd';
 const { TextArea } = Input;
@@ -46,13 +48,8 @@ class Detail extends React.Component {
 		}
 	}
 	renderDetail = (str = '') => {
-		return (
-			<div className={l.box}>
-				{str.split('\n').map((item, index) => {
-					return <p key={index}>{item}</p>;
-				})}
-			</div>
-		);
+		const ok = BraftEditor.createEditorState(str).toHTML()
+		return <div className="braft-output-content" dangerouslySetInnerHTML={{__html: ok}}></div>
 	};
 
 	goback = () => {
