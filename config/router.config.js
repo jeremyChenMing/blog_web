@@ -7,6 +7,10 @@ export default [
 		path: '/register',
 		component: './login/Register',
 	},
+	{
+		path: '/game',
+		component: './game/CarGame',
+	},
 	
 	{
 		path: '/', 

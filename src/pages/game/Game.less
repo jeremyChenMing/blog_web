@@ -1,0 +1,402 @@
+.gameBox {
+	background-color: rgba(0,0,0,1);
+	width: 100%;
+	height: 100%;
+	// overflow: hidden;
+
+		.board {
+			width: 480px;
+			// height: 800px;
+			// position: absolute;
+			// margin: auto;
+			// left: 0;
+			// top: 0;
+			// bottom: 0;
+			// right: 0;
+			// overflow: hidden;
+			// border: #ffc 5px solid;
+
+			// self
+			margin: 0 auto;
+			position: relative;
+			height: 100%;
+			overflow: hidden;
+		}
+		.roadbed {
+			background: url(../../assets/resource/road.png) repeat-y;
+			width: 480px;
+			height: 1600px;
+			position: absolute;
+			left: 0;
+			top: -800px;
+		}
+		.road {
+			width: 310px;
+			height: 800px;
+			position: absolute;
+			left: 50%;
+			top: 0;
+			// margin-left: -160px;
+
+			transform: translateX(-50%);
+			// background-color: rgba(37,132,189,.5);
+			// background-color: red;
+		}
+		.roadRun {
+			// transform: translateZ(0);
+			animation: roadRun 2.2s linear infinite;
+		}
+		@keyframes roadRun {
+			100% {
+				transform: translateY(800px);
+			}
+		}
+		.hero {
+			transition: transform 0.5s ease;
+			width: 142px;
+			height: 162px;
+			position: absolute;
+			bottom: 40px;
+			left: 0;
+			display: none;
+		}
+		.hero .body {
+			background: url(../../assets/resource/hero.png) no-repeat 50% 0,
+				url(../../assets/resource/heroDied.png) no-repeat -1000% 0,
+				url(../../assets/resource/heroSuper.png) no-repeat -1000% 0;
+			height: 100%;
+		}
+		.hero .light {
+			animation: light 0.6s ease infinite;
+			background: url(../../assets/resource/carLight.png) no-repeat 50% 0;
+			width: 142px;
+			height: 57px;
+			position: absolute;
+			top: -35px;
+			left: -4px;
+		}
+		@keyframes light {
+			0% {
+				opacity: 1;
+			}
+			50% {
+				opacity: 0.3;
+			}
+			100% {
+				opacity: 1;
+			}
+		}
+		.start {
+			background: url(../../assets/resource/start.png) no-repeat;
+			width: 260px;
+			height: 86px;
+			position: absolute;
+			left: 50%;
+			top: 600px;
+			margin-left: -130px;
+			z-index: 10;
+			cursor: pointer;
+		}
+		.kilo {
+			background: url(../../assets/resource/kilo.png) no-repeat;
+			width: 133px;
+			height: 100px;
+			line-height: 100px;
+			text-align: right;
+			position: absolute;
+			right: 0;
+			top: 20px;
+			font-size: 32px;
+			font-weight: 700;
+			color: #ffea00;
+			padding-right: 50px;
+		}
+		.enemy {
+			transform: translateZ(0);
+			width: 142px;
+			position: absolute;
+		}
+		.enemy .body {
+			height: 100%;
+			position: relative;
+		}
+		.enemy0 {
+			height: 160px;
+			top: -160px;
+		}
+		.enemy0 .body {
+			background: url(../../assets/resource/car0.png) no-repeat 50% 0;
+		}
+		.enemy1 {
+			height: 160px;
+			top: -160px;
+		}
+		.enemy1 .body {
+			background: url(../../assets/resource/car1.png) no-repeat 50% 0;
+		}
+		.enemy2 {
+			height: 220px;
+			top: -220px;
+		}
+		.enemy2 .body {
+			background: url(../../assets/resource/car2.png) no-repeat 50% 0;
+		}
+
+		.roadPlay .hero {
+			animation: show 1.5s ease;
+			display: block;
+		}
+		@keyframes show {
+			0% {
+				transform: translateY(175px);
+			}
+		}
+		.hide {
+			display: none;
+		}
+
+		.hero.left {
+			transform: translateX(0);
+		}
+		.hero.right {
+			transform: translateX(178px);
+		}
+		.enemy.speed0 {
+			animation: speed 1s linear;
+		}
+		.enemy.speed1 {
+			animation: speed 1.5s linear;
+		}
+		.enemy.speed2 {
+			animation: speed 2s linear;
+		}
+		@keyframes speed {
+			100% {
+				transform: translateY(1000px);
+			}
+		}
+		.enemy.loc0 {
+			left: 0;
+		}
+		.enemy.loc1 {
+			left: 178px;
+		}
+
+		.failbub {
+			/*background:rgba(0,0,0,0.9);*/
+			width: 380px;
+			height: 240px;
+			border-radius: 10px;
+			/*border:#fff 5px solid;*/
+			position: absolute;
+			left: 50px;
+			top: 50%;
+			margin-top: -130px;
+			z-index: 111;
+			display: none;
+		}
+		.failbub .failtext {
+			background: url(../../assets/resource/failedNotice.png) no-repeat 50% 0;
+			width: 100%;
+			height: 116px;
+			display: block;
+		}
+		.failbub .retry {
+			background: url(../../assets/resource/playAgainBtn.png) no-repeat;
+			width: 266px;
+			height: 99px;
+			display: block;
+			margin: 25px auto 0;
+			cursor: pointer;
+		}
+		.help {
+			background: rgba(255, 255, 255, 0.8);
+			width: 200px;
+			height: 40px;
+			line-height: 40px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin: -20px 0 0 -100px;
+			color: #66757d;
+			border-radius: 30px;
+			text-align: center;
+			font-family: 'microsoft yahei';
+			display: none;
+		}
+		.roadPlay .help {
+			animation: help 2s ease forwards;
+			display: block;
+		}
+
+		.helpsp {
+			background: rgba(255, 255, 255, 0.8);
+			width: 200px;
+			height: 40px;
+			line-height: 40px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin: -20px 0 0 -100px;
+			color: #66757d;
+			border-radius: 30px;
+			text-align: center;
+			font-family: 'microsoft yahei';
+			display: none;
+		}
+		.helpsp.show {
+			animation: help 2s ease forwards;
+			display: block;
+		}
+		@keyframes help {
+			0% {
+				opacity: 0;
+			}
+			40% {
+				opacity: 1;
+			}
+			80% {
+				opacity: 1;
+			}
+			100% {
+				opacity: 0;
+			}
+		}
+
+		.crashed .enemy,
+		.crashed .roadbed {
+			animation-play-state: paused;
+		}
+		.crashed .hero .body {
+			background: url(../../assets/resource/heroDied.png) no-repeat;
+		}
+		.crashed .hero .light {
+			display: none;
+		}
+		.crashed .failbub {
+			animation: failShow 0.5s ease;
+			display: block;
+		}
+
+		@keyframes failShow {
+			0% {
+				transform: translateY(250px);
+			}
+			80% {
+				transform: translateY(-12px);
+			}
+			100% {
+				transform: translateY(0);
+			}
+		}
+		.superMode .hero .body {
+			animation: heroSuper 0.1s ease infinite;
+			background: url(../../assets/resource/heroSuper.png) no-repeat 8px 0px;
+			height: 176px;
+			bottom: 4px;
+		}
+		.superMode .hero .light {
+			display: none;
+		}
+		@keyframes heroSuper {
+			0% {
+				opacity: 1;
+			}
+			50% {
+				opacity: 0.7;
+			}
+			100% {
+				opacity: 1;
+			}
+		}
+
+		.superMode .roadRun {
+			animation: roadRun 0.8s linear infinite;
+		}
+
+		.superMode .enemy.loc0 .chunge {
+			transition: transform 1s ease-out;
+			transform: translate3d(-80px, 0, 0) rotate(-280deg);
+			transform-origin: left bottom;
+		}
+		.superMode .enemy.loc1 .chunge {
+			transition: transform 1s ease-out;
+			transform: translate3d(80px, 0, 0) rotate(280deg);
+			transform-origin: right bottom;
+		}
+	
+}
+
+
+.btn{
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	padding: 10px;
+	.back{
+		height: 60px;
+	}
+	.over{
+		display: block;
+	}
+}
+
+.record{
+	position: absolute;
+	right: 0;
+	top: 0;
+	max-height: 600px;
+	width: 22%;
+	padding: 20px;
+	& > h2{
+		color: #ffea00;
+		margin-bottom: 10px;
+	}
+	.list{
+	
+		& > li{
+			display: flex;
+			align-items: center;
+			color: #fff;
+			margin-bottom: 10px;
+			& > span{
+				font-size: 16px;
+				font-weight: bolder;
+				background-color: blue;
+				width: 25px;
+				text-align: center;
+				border-radius: 5px;
+				margin-right: 10px;
+			}
+			& > img{
+				height: 30px;
+				width: 30px;
+				border-radius: 50%;
+				border: 1px solid rgba(255, 255, 255,.2);
+			}
+			.name{
+				flex: 1;
+				padding: 0 5px;
+			}
+			.unit{
+				color: #ffea00;
+				font-weight: bolder;
+			}
+		}
+		.color0{
+			& > span{
+				background-color: red;
+			}
+		}
+		.color1{
+			& > span{
+				background-color: #ffea00;
+			}
+		}
+		.color2{
+			& > span{
+				background-color: green;
+			}
+		}
+	}
+}

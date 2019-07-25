@@ -182,3 +182,27 @@ export async function getUserOfFollow(id) {
   return request(`/blog/followers/${id}`);
 }
 
+
+
+
+
+
+
+// 获取游戏记录
+export async function getGameOfList(params) {
+  console.log(new Date().getTime(), 'list')
+  return request(`/blog/record_list?${stringify(params)}`);
+}
+
+// 创建游戏记录
+export async function createGameRecord(params) {
+  console.log(new Date().getTime(), 'post')
+  return request(`/blog/record`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
+
+

@@ -117,7 +117,7 @@ class Add extends React.Component {
 
 	render() {
 		const { getFieldDecorator } = this.props.form;
-		const { fields, editorState } = this.state;
+		const { fields } = this.state;
 		const {
 			location: { query },
 		} = this.props;

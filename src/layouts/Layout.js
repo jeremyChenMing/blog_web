@@ -181,7 +181,10 @@ class BasicLayout extends React.Component {
 				<Layout>
 					<div className={l.header}>
 						<div className={l.inner}>
-				      <Link to="/"><img className={l.img} src="/img/krhr.png" alt="logo" /></Link>
+				      <Link className={l.img} to="/"><img src="/img/krhr.png" alt="logo" /></Link>
+              <div className={l.middle}>
+                <Link to="/game">小游戏</Link>
+              </div>
 				      <div className={l.right}>
 				      	{location.pathname === '/' && 
                 <span className={l.searchBox}>
@@ -219,7 +222,6 @@ class BasicLayout extends React.Component {
                   </span>
                 }
                 <Icon onClick={this.addNews} className={l.icons} type="plus-circle" />
-				      	
 				      </div>
 				    </div>
 					</div>
