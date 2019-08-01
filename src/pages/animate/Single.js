@@ -9,18 +9,10 @@ const rdom = require('react-dom');
 const BgElement = Element.BgElement;
 
 
-let is_running = true;
 let up_time;
 let down_time;
 let num = 0;
 let down = 0;
-
-let s = {};
-
-s.mousewheel = {
-  event: false,
-  lastScrollTime: (new window.Date()).getTime()
-};
 
 
 class Demo extends React.Component {
@@ -42,61 +34,32 @@ class Demo extends React.Component {
     const ele = rdom.findDOMNode(this);
     const data = normalizeWheel(e);
     let delta = -0;
-
     if (Math.abs(data.pixelY) > Math.abs(data.pixelX)) delta = data.pixelY;
     // console.log(delta)
     if (delta === 0) return;
     if (delta < 0) {
-      console.log('up')
+      // console.log('up')
       this.handleUp()
       if (up_time) {
         clearTimeout(up_time)
       }
       up_time = setTimeout(function () {
-        console.log('up---结束', is_running)
+        // console.log('up---结束')
         num = 0
-      }, 50)
+      }, 100)
     }else{
-      console.log('down')
+      // console.log('down')
       this.handleDown()
       if (down_time) {
         clearTimeout(down_time)
       }
       down_time = setTimeout(function () {
-        console.log('down---结束')
+        // console.log('down---结束')
         down = 0;
-      }, 50)
+      }, 100)
     }
   }
-  handle = (type) => {
-    // console.log(num, 'handle')
-    // if (type === 'up') {
-    //   num++;
-    // }else{
-    //   down++
-    // }
-    num++
-    // console.log(num, down)
-    if (type === 'up' && num === 1) {
-      console.log('向下')
-      this.banner.next()
-      // this.banner.slickGoTo(++num)
-    }else if (type === 'down' && num === 1) {
-      console.log('向上', this.banner)
-      this.banner.prev()
-      // is_running = false;
-      // setTimeout(this.banner.next, 500)
-    }
-  }
-  changeBanner = (key) => {
-    // console.log(key)
-    if (key === 'after') {
-      // is_running = true
-      // setTimeout(function () {
-      //   is_running = true
-      // },100)
-    }
-  }
+
   render() {
     return (
       <BannerAnim 
@@ -106,7 +69,7 @@ class Demo extends React.Component {
         prefixCls="banner-user" 
         ref={(c) => { this.banner = c; }}
         type="verticalOverlay"
-        onChange={this.changeBanner}
+        // onChange={this.changeBanner}
       >
         
         <Element prefixCls="banner-user-elem" key="0">
