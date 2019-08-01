@@ -11,6 +11,10 @@ export default [
 		path: '/game',
 		component: './game/CarGame',
 	},
+	{
+		path: '/animate',
+		component: './animate/Single',
+	},
 	
 	{
 		path: '/', 

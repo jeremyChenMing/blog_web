@@ -1,3 +1,4 @@
+@import '../less/Index.less';
 :global{
 	.ant-layout{
 		background-color: #fff!important;
@@ -34,7 +35,7 @@
 	z-index: 100;
 
 	.inner{
-		width: 1024px;
+		width: @width;
 		margin: 0 auto;
 		height: 100%;
 		overflow: hidden;
@@ -51,6 +52,7 @@
 			padding: 0 40px;
 			a{
 				font-size: 16px;
+				padding: 0 15px;
 			}
 		}
 		.right{
@@ -102,6 +104,7 @@
 	padding-top: 60px;
 	min-height: 100vh;
 	position: relative;
+	background-color: rgba(255,255,255, .7);
 }
 
 

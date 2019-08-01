@@ -177,59 +177,60 @@ class BasicLayout extends React.Component {
 		// }
 		return (
       <LocaleProvider local={zh_CN}>
-			<React.Fragment>
-				<Layout>
-					<div className={l.header}>
-						<div className={l.inner}>
-				      <Link className={l.img} to="/"><img src="/img/krhr.png" alt="logo" /></Link>
-              <div className={l.middle}>
-                <Link to="/game">小游戏</Link>
-              </div>
-				      <div className={l.right}>
-				      	{location.pathname === '/' && 
-                <span className={l.searchBox}>
-				      		<Icon type="search" key="Icon" className={l.searchIcon} onClick={this.enterSearchMode} />
-				      		<AutoComplete
-					          key="AutoComplete"
-					          dataSource={[]}
-					          className={cx(l.input, l[searchMode ? 'show' : null])}
-					          onChange={this.onChange}
-					        >
-					          <Input
-					            ref={node => {this.input = node;}}
-					            onKeyDown={this.onKeyDown}
-					            onBlur={this.leaveSearchMode}
-					          />
-					        </AutoComplete>
-				      	</span>
-                }
-                {
-                  message.id 
-                  ? <span className={l.rightCell}>
-                      <Link to="/person">
-                        <img
-                          src={message.avatar ? `${AVATAR}${message.avatar}` : DEFAULT}
-                          alt="auth"
-                        />
-                      </Link>
-                      &nbsp;&nbsp;
-                      <span className={l.idname}>{message.nickname}</span>
-                      <img src="/img/tuichu.png" alt="out" className={l.out} onClick={this.quite} />
-                  </span>
-                  : <span className={l.rightCell}>
-                    <Link to="/login">登录</Link>
-                    <Link to="/register">注册</Link>
-                  </span>
-                }
-                <Icon onClick={this.addNews} className={l.icons} type="plus-circle" />
-				      </div>
-				    </div>
-					</div>
-					<div className={l.container}>
-						{this.props.children}
-					</div>
-				</Layout>
-			</React.Fragment>
+  			<React.Fragment>
+  				<Layout>
+  					<div className={l.header}>
+  						<div className={l.inner}>
+  				      <Link className={l.img} to="/"><img src="/img/krhr.png" alt="logo" /></Link>
+                <div className={l.middle}>
+                  <Link to="/game">小游戏</Link>
+                  <Link to="/animate">效果</Link>
+                </div>
+  				      <div className={l.right}>
+  				      	{location.pathname === '/' && 
+                  <span className={l.searchBox}>
+  				      		<Icon type="search" key="Icon" className={l.searchIcon} onClick={this.enterSearchMode} />
+  				      		<AutoComplete
+  					          key="AutoComplete"
+  					          dataSource={[]}
+  					          className={cx(l.input, l[searchMode ? 'show' : null])}
+  					          onChange={this.onChange}
+  					        >
+  					          <Input
+  					            ref={node => {this.input = node;}}
+  					            onKeyDown={this.onKeyDown}
+  					            onBlur={this.leaveSearchMode}
+  					          />
+  					        </AutoComplete>
+  				      	</span>
+                  }
+                  {
+                    message.id 
+                    ? <span className={l.rightCell}>
+                        <Link to="/person">
+                          <img
+                            src={message.avatar ? `${AVATAR}${message.avatar}` : DEFAULT}
+                            alt="auth"
+                          />
+                        </Link>
+                        &nbsp;&nbsp;
+                        <span className={l.idname}>{message.nickname}</span>
+                        <img src="/img/tuichu.png" alt="out" className={l.out} onClick={this.quite} />
+                    </span>
+                    : <span className={l.rightCell}>
+                      <Link to="/login">登录</Link>
+                      <Link to="/register">注册</Link>
+                    </span>
+                  }
+                  <Icon onClick={this.addNews} className={l.icons} type="plus-circle" />
+  				      </div>
+  				    </div>
+  					</div>
+  					<div className={l.container}>
+  						{this.props.children}
+  					</div>
+  				</Layout>
+  			</React.Fragment>
       </LocaleProvider>
 		);
 	}

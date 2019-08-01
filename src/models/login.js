@@ -2,10 +2,11 @@ import { routerRedux } from 'dva/router';
 // import { stringify } from 'qs';
 import { loginUser, registerUser } from '@/services/api';
 import { 
-  // setToken, 
+  setToken, 
   clear, 
   setUserInfo 
 } from '@/utils/common';
+import { notification } from 'antd'
 
 export default {
   namespace: 'login',
@@ -44,23 +45,27 @@ export default {
       clear();
       yield put(
         routerRedux.replace({
-          pathname: '/',
+          pathname: '/login',
         })
       )
       window.location.reload();
-      
     },
     *create({ payload, callback }, { call, put }) {
       const response = yield call(registerUser, payload);
       if (response.code) {
-        callback(response)
+        notification.error({
+          message: `注册失败，${response.msg}`
+        })
       }else{
-        callback(response)
-        // yield put({
-        //   type: 'changeLoginStatus',
-        //   payload: response,
-        // });
-        // yield put(routerRedux.replace('/home'));
+        notification.success({
+          message: '注册成功！'
+        })
+
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+        yield put(routerRedux.replace('/'));
       }
     },
 
@@ -68,7 +73,7 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      // setToken(payload.token);
+      setToken(payload.token);
       delete payload.password;
       setUserInfo(payload);
       return {

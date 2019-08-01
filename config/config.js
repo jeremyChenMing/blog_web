@@ -34,11 +34,11 @@ const plugins = [
 export default {
   treeShaking: true,
   proxy: {
-    '/api/': {
-      target: 'http://yxb.d.upvi.com',
-      changeOrigin: true,
-      // pathRewrite: { '^/api': '' },
-    },
+    // '/api/': {
+    //   target: 'http://yxb.d.upvi.com',
+    //   changeOrigin: true,
+    //   // pathRewrite: { '^/api': '' },
+    // },
     '/blog/': {
       target: 'http://127.0.0.1:7000/',
       changeOrigin: true,
@@ -50,9 +50,7 @@ export default {
   },
   plugins,
   theme: {
-    '@primary-color': '#2584BD',
-    '@brand-primary': '#2584BD',
-    '@brand-primary-tap': 'rgba(37, 132, 189, .8)',
+    '@primary-color': '#019BF0',
   },
   alias: {
     '@': require('path').resolve(__dirname, 'src'),

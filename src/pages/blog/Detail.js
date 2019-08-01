@@ -4,6 +4,7 @@ import l from './Index.less';
 import Link from 'umi/link';
 import moment from 'moment';
 import router from 'umi/router';
+import QueueAnim from 'rc-queue-anim';
 import { postFollow } from '@/services/api';
 import 'braft-editor/dist/output.css'
 import BraftEditor from 'braft-editor'
@@ -23,6 +24,7 @@ class Detail extends React.Component {
 		showId: undefined,
 		word: undefined,
 		replyValue: undefined,
+		show: false,
 	};
 	componentDidMount() {
 		const {
@@ -37,7 +39,12 @@ class Detail extends React.Component {
 					id: query.id,
 					params: {login_id: message.id} 
 				},
-				callback: () => {},
+				callback: () => {
+					console.log('111')
+					this.setState({
+						show: true
+					})
+				},
 			});
 
 			dispatch({
@@ -211,7 +218,9 @@ class Detail extends React.Component {
 			console.log(err)
 		})
 	}
+
 	render() {
+		const { show } = this.state;
 		const {
 			blog: { detail },
 			list,
@@ -219,136 +228,142 @@ class Detail extends React.Component {
 		} = this.props;
 		const selfe = detail.user && detail.user.id !== message.id ? true : false;
 		return (
-			<div className={l.blogBox}>
-				<h1>
-					{detail.title}
-					<img onClick={this.goback} src="/img/ic_order_back@2x.png" alt="back" />
-				</h1>
-				<div className={l.header}>
-					<div className={l.left}>
-						<span>
-							创建时间：
-							{detail.created_at ? moment(detail.created_at).format('YYYY-MM-DD HH:mm') : ''}
-						</span>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<span>
-							类别：
-							{CLASSIFIYOBJS[detail.classify]}
-						</span>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<span>
-							点赞数：
-							{detail.nices}
-						</span>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<span>
-							阅读数：
-							{detail.hots}
-						</span>
-						
+			<QueueAnim type="top">
+			{
+				show ?
+				<div className={l.blogBox} key="detail">
+					<h1>
+						{detail.title}
+						<img onClick={this.goback} src="/img/ic_order_back@2x.png" alt="back" />
+					</h1>
+					<div className={l.header}>
+						<div className={l.left}>
+							<span>
+								创建时间：
+								{detail.created_at ? moment(detail.created_at).format('YYYY-MM-DD HH:mm') : ''}
+							</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<span>
+								类别：
+								{CLASSIFIYOBJS[detail.classify]}
+							</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<span>
+								点赞数：
+								{detail.nices}
+							</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<span>
+								阅读数：
+								{detail.hots}
+							</span>
+							
+						</div>
+						<div className={l.right}>
+							<img
+								src={detail.user && detail.user.avatar ? `${AVATAR}${detail.user.avatar}` : DEFAULT}
+								alt="auth"
+							/>
+							<span><Link to={`/people/${detail.user ? detail.user.id : ''}`}> {detail.user ? detail.user.nickname : ''}</Link></span>
+							
+							{selfe ? <Tag onClick={this.handleFollow.bind(null, detail, message)} className={l.tags} color={detail.followed ? 'blue' : ''}>{detail.followed ? '取关' : '关注'}</Tag> : null}
+						</div>
 					</div>
-					<div className={l.right}>
-						<img
-							src={detail.user && detail.user.avatar ? `${AVATAR}${detail.user.avatar}` : DEFAULT}
-							alt="auth"
+					<div className={l.content}>{this.renderDetail(detail.content)}</div>
+					<div className={l.funBox}>
+						<Button onClick={this.handleNice.bind(null, this.renderNice(detail))}>{this.renderNice(detail)} | {detail.user_like ? detail.user_like.length : 0}</Button>
+					</div>
+					<div className={l.commentBox}>
+						<TextArea
+							onChange={this.handleTextarea}
+							value={this.state.word}
+							placeholder="请输入评论内容"
+							autosize={{ minRows: 4, maxRows: 6 }}
 						/>
-						<span><Link to={`/people/${detail.user ? detail.user.id : ''}`}> {detail.user ? detail.user.nickname : ''}</Link></span>
-						
-						{selfe ? <Tag onClick={this.handleFollow.bind(null, detail, message)} className={l.tags} color={detail.followed ? 'blue' : ''}>{detail.followed ? '取关' : '关注'}</Tag> : null}
-					</div>
-				</div>
-				<div className={l.content}>{this.renderDetail(detail.content)}</div>
-				<div className={l.funBox}>
-					<Button onClick={this.handleNice.bind(null, this.renderNice(detail))}>{this.renderNice(detail)} | {detail.user_like ? detail.user_like.length : 0}</Button>
-				</div>
-				<div className={l.commentBox}>
-					<TextArea
-						onChange={this.handleTextarea}
-						value={this.state.word}
-						placeholder="请输入评论内容"
-						autosize={{ minRows: 4, maxRows: 6 }}
-					/>
-					<div className={l.btns}>
-						<Button disabled={!this.state.word} onClick={this.handleComment} type="primary">
-							发布评论
-						</Button>
-					</div>
-					<div className={l.commentList}>
-						<ul>
-							{list.map(item => {
-								return (
-									<li key={item.id}>
-										<div className={l.left}>
-											<img
-												src={
-													item.belong_user && item.belong_user.avatar
-														? `${AVATAR}${item.belong_user.avatar}`
-														: DEFAULT
-												}
-												alt="auth"
-											/>
-										</div>
-										<div className={l.right}>
-											<p>
-												{item.belong_user ? item.belong_user.nickname : ''}{' '}
-												<span>
-													{item.created_at
-														? moment(item.created_at).format('YYYY-MM-DD HH:mm')
-														: ''}
-												</span>
-											</p>
-											<p>{item.word}</p>
-											<span onClick={this.handleShow.bind(null, item.id)} className={l.replyAction}>
-												回复
-											</span>
-											{
-												item.comment_children && item.comment_children.length > 0
-												? <div className={l.secComments}>
-													{
-														item.comment_children.map( k => {
-															return <div className={l.li} key={k.id}>
-																<p>
-																	{k.belong_user ? k.belong_user.nickname : ''}{' '}
-																	<span>
-																		{k.created_at
-																			? moment(k.created_at).format('YYYY-MM-DD HH:mm')
-																			: ''}
-																	</span>
-																</p>
-																<p>{k.word}</p>
-															</div>
-														})
+						<div className={l.btns}>
+							<Button disabled={!this.state.word} onClick={this.handleComment} type="primary">
+								发布评论
+							</Button>
+						</div>
+						<div className={l.commentList}>
+							<ul>
+								{list.map(item => {
+									return (
+										<li key={item.id}>
+											<div className={l.left}>
+												<img
+													src={
+														item.belong_user && item.belong_user.avatar
+															? `${AVATAR}${item.belong_user.avatar}`
+															: DEFAULT
 													}
-												</div>
-												: null
-											}
-											{item.id === this.state.showId && (
-												<div className={l.replyBox}>
-													<TextArea
-														value={this.state.replyValue}
-														onChange={this.changeReply}
-														className={l.text}
-														placeholder="请输入回复内容"
-														autosize={{ minRows: 2, maxRows: 4 }}
-													/>
-													<Button
-														onClick={this.handleReply.bind(null, item)}
-														size="small"
-														className={l.acs}
-														type="primary"
-													>
-														添加回复
-													</Button>
-												</div>
-											)}
-										</div>
-									</li>
-								);
-							})}
-						</ul>
+													alt="auth"
+												/>
+											</div>
+											<div className={l.right}>
+												<p>
+													{item.belong_user ? item.belong_user.nickname : ''}{' '}
+													<span>
+														{item.created_at
+															? moment(item.created_at).format('YYYY-MM-DD HH:mm')
+															: ''}
+													</span>
+												</p>
+												<p>{item.word}</p>
+												<span onClick={this.handleShow.bind(null, item.id)} className={l.replyAction}>
+													回复
+												</span>
+												{
+													item.comment_children && item.comment_children.length > 0
+													? <div className={l.secComments}>
+														{
+															item.comment_children.map( k => {
+																return <div className={l.li} key={k.id}>
+																	<p>
+																		{k.belong_user ? k.belong_user.nickname : ''}{' '}
+																		<span>
+																			{k.created_at
+																				? moment(k.created_at).format('YYYY-MM-DD HH:mm')
+																				: ''}
+																		</span>
+																	</p>
+																	<p>{k.word}</p>
+																</div>
+															})
+														}
+													</div>
+													: null
+												}
+												{item.id === this.state.showId && (
+													<div className={l.replyBox}>
+														<TextArea
+															value={this.state.replyValue}
+															onChange={this.changeReply}
+															className={l.text}
+															placeholder="请输入回复内容"
+															autosize={{ minRows: 2, maxRows: 4 }}
+														/>
+														<Button
+															onClick={this.handleReply.bind(null, item)}
+															size="small"
+															className={l.acs}
+															type="primary"
+														>
+															添加回复
+														</Button>
+													</div>
+												)}
+											</div>
+										</li>
+									);
+								})}
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
+				: null
+			}
+			</QueueAnim>
 		);
 	}
 }

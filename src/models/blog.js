@@ -18,7 +18,7 @@ export default {
         word: '',
         classify: ''
       },
-      count: 0,
+      total: 0,
       items: []
     },
     detail: {}
@@ -27,8 +27,9 @@ export default {
     setup({ dispatch }, done) {},
   },
   effects: {
-    *list({ payload }, { call, put, select }) {
-      const query = yield select(state => state.blog.list.query);
+    *list({ payload, base }, { call, put, select }) {
+      const olds = yield select(state => state.blog.list);
+      const query = olds.query
       let params = {...query, ...payload}
       let ques = {
         page: params.page,
@@ -40,14 +41,27 @@ export default {
       }
       const response = yield call(getBlogList, ques);
       if (response && !response.code) {
-        yield put({
-          type: 'save',
-          payload: {
-            ...response, 
-            query: params
-          },
-        });  
+
+        if (!base) {
+          yield put({
+            type: 'save',
+            payload: {
+              total: response.total,
+              items: olds.items.concat(response.items),
+              query: params
+            },
+          });  
+        }else{
+          yield put({
+            type: 'save',
+            payload: {
+              ...response, 
+              query: params
+            },
+          });
+          
       }
+        }
     },
     *details({ payload, callback }, { call, put }) {
       const response = yield call(getBlogDetail, payload.id, payload.params);

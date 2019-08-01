@@ -3,6 +3,8 @@ import Link from 'umi/link'
 import l from './Login.less'
 import { connect } from 'dva';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+// import moment from 'moment'
+import LogoGather from '@/components/widget/LogoGather'
 
 @connect(({ login, loading }) => ({
 	login,
@@ -10,6 +12,12 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 }))
 @Form.create()
 class Login extends React.Component {
+	state = {
+		// image: 'https://zos.alipayobjects.com/rmsportal/TOXWfHIUGHvZIyb.svg',
+		image: '/img/logo_white.png',
+		pixSize: 20,
+    pointSize: 10,
+	}
 	componentDidMount() {
 		const { form: {setFieldsValue} } = this.props;
 		setFieldsValue({
@@ -44,7 +52,11 @@ class Login extends React.Component {
     const { loading } = this.props;
     return (
 	    <div className={l.loginBox}>
-
+	    	<LogoGather
+          image={this.state.image}
+          pixSize={this.state.pixSize}
+          pointSizeMin={this.state.pointSize}
+        />
 	      <Form onSubmit={this.handleSubmit} className={l.login_form}>
 	      	<h1>登录</h1>
 	        <Form.Item>

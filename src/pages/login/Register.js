@@ -12,7 +12,7 @@ import {
 	Checkbox,
 	Button,
 	AutoComplete,
-	notification
+	// notification
 } from 'antd';
 
 const { Option } = Select;
@@ -50,21 +50,6 @@ class Register extends React.Component {
 				dispatch({
 					type: 'login/create',
 					payload: values,
-					callback: (data) => {
-						if (data.code) {
-							notification.error({
-								message: '注册失败！'
-							})
-						}else{
-							notification.success({
-								message: '注册成功！'
-							})
-							setTimeout(function () {
-								router.push('/')
-							}, 1500)
-						}
-						
-					}
 				})
 			}
 		});
