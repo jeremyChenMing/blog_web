@@ -185,6 +185,7 @@ class BasicLayout extends React.Component {
                 <div className={l.middle}>
                   <Link to="/game">小游戏</Link>
                   <Link to="/animate">效果</Link>
+                  <Link to="/tool">工具</Link>
                 </div>
   				      <div className={l.right}>
   				      	{location.pathname === '/' && 

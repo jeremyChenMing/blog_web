@@ -1,0 +1,111 @@
+
+
+.demo{
+	width: 200px;
+	height: 100px;
+	line-height: 100px;
+	background-color: #ffc;
+	text-align: center;
+}
+
+.box{
+	min-height: 100vh;
+	background-color: #f5f5f5;
+	padding-top: 100px;
+	.btm{
+		overflow: hidden;
+		height: 200px;
+		background-color: #cfc;
+		transition: height cubic-bezier(0.25,0.1,0.25,1) .4s;
+
+	}
+	.nav{
+		height: 60px;
+		background-color: #fff;
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		&:hover{
+			.btm{
+				height: 200px;
+			}
+			
+		}
+	}
+	
+	.header{
+		height: 60px;
+		display: flex;
+		align-items: center;
+		
+		
+		
+		.head{
+			width: 60px;
+			margin: 0 20px;
+			height: 100%;
+			line-height: 60px;
+			text-align: center;
+			cursor: pointer;
+			background-color: transparent;
+			transition: background-color ease-in .2s;
+			&:hover{
+				background-color: darken(#ccc, 10%);
+			}
+		}
+	}
+	.son{
+		height: 100px;
+		padding: 20px 100px;
+		background-color: #ffc;
+	}
+}
+
+.banner-user{
+	height: 200px;
+	width: 100%;
+}
+.banner-user-elem{
+	width: 100%;
+	height: 200px;
+	text-align: center;
+	color: #fff;
+	position: relative;
+}
+.bg{
+	width: 100%;
+	height: 200px;
+	position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.banner-user-title{
+	height: 200px;
+}
+.hd{
+	display: flex;
+	height: 100%;
+	align-items: center;
+	justify-content: space-between;
+	.left{
+		width: 300px;
+		height: 100%;
+		padding: 20px;
+		& > img{
+			height: 100%;
+		}
+	}
+	.right{
+		flex: 1;
+	}
+}
+
+
+
+
+
+
+

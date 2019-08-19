@@ -15,7 +15,10 @@ export default [
 		path: '/animate',
 		component: './animate/Single',
 	},
-	
+	{
+		path: '/tool',
+		component: './animate/Tool',
+	},
 	{
 		path: '/', 
 		component: '../layouts/Layout',
