@@ -22,10 +22,13 @@ class List extends React.Component {
 		more: false,
 	};
 	componentDidMount() {
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'blog/list',
-		});
+		const { dispatch, blog: {list} } = this.props;
+		if (list.count <= 0) {
+			dispatch({
+				type: 'blog/list',
+			});
+		}
+		
 
 		window.addEventListener('scroll', this.handleScroll);
 	}
@@ -165,7 +168,7 @@ class List extends React.Component {
 						</Dropdown>
 					</div>
 				</div>
-				{list.total > 0 ? (
+				{list.count > 0 ? (
 					<div>
 						<div className={l.list}>
 							{list.items.map((item, index) => {
@@ -193,7 +196,7 @@ class List extends React.Component {
 								);
 							})}
 						</div>
-						{list.total > list.items.length ? (
+						{list.count > list.items.length ? (
 							<div className={l.page}>
 								<span onClick={this.handleMore}>
 									{loading ? <Icon type="loading" /> : null} 点击加载更多...

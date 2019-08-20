@@ -3,10 +3,15 @@ import l from './Demo.less'
 import { Button } from 'antd'
 import QueueAnim from 'rc-queue-anim';
 
+
+import { getTest, createTest, getTestDetail, putTest, deleteTest } from '@/services/api'
+
 import BannerAnim, { Element } from 'rc-banner-anim';
 import TweenOne from 'rc-tween-one';
 import 'rc-banner-anim/assets/index.css';
 const BgElement = Element.BgElement;
+
+
 
 
 
@@ -24,6 +29,17 @@ export default class Demo extends React.Component {
 		active: '',
 		text: '',
 	}
+
+	componentDidMount() {
+		getTest({page: 2, page_size: 10}).then( data => {
+			console.log(data)
+
+		}).catch(err => {
+			console.log(err)
+		})
+	}
+
+
 
 	moveIn = (index, item, e) => {
 		e.stopPropagation()
@@ -48,6 +64,38 @@ export default class Demo extends React.Component {
 	}
 
 
+
+	handle = () => {
+		if (true) {
+			const para = {
+				title: 'name',
+				code: '123'
+			}
+			// putTest,  createTest
+			putTest(2, para).then( data => {
+				console.log(data)
+
+			}).catch(err => {
+				console.log(err)
+			})
+		}else{
+			getTestDetail(2).then( data => {
+				console.log(data)
+
+			}).catch(err => {
+				console.log(err)
+			})	
+		}
+
+		
+	}
+	handleDelete = () => {
+		deleteTest(1).then( data => {
+			console.log(data)
+		}).catch(err => {
+			console.log(err)
+		})
+	}
 	render() {
 		const { navs, colors, active, text } = this.state;
 		// onMouseEnter={this.moveIn} onMouseLeave={this.moveOut}
@@ -105,6 +153,8 @@ export default class Demo extends React.Component {
 					</div>
 				<div className={l.content}>
 					相关内容
+					<Button onClick={this.handle}>发送接口</Button>
+					<Button onClick={this.handleDelete}>删除</Button>
 				</div>
 			</div>
 		);

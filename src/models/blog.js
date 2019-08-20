@@ -18,7 +18,7 @@ export default {
         word: '',
         classify: ''
       },
-      total: 0,
+      count: 0,
       items: []
     },
     detail: {}
@@ -46,7 +46,7 @@ export default {
           yield put({
             type: 'save',
             payload: {
-              total: response.total,
+              count: response.count,
               items: olds.items.concat(response.items),
               query: params
             },

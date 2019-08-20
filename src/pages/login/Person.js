@@ -66,6 +66,17 @@ class Person extends React.Component {
 		loading: false,
 		data: {},
 	};
+
+	getArtical = () => {
+		const { message } = this.props;
+		getUserArticals(message.id).then(data => {
+			if (data && !data.code) {
+				this.setState({
+					list: data,
+				});
+			}
+		});
+	}
 	componentDidMount() {
 		const {
 			form: { setFieldsValue },
@@ -86,13 +97,7 @@ class Person extends React.Component {
 			}
 		});
 
-		getUserArticals(message.id).then(data => {
-			if (data && !data.code) {
-				this.setState({
-					list: data,
-				});
-			}
-		});
+		this.getArtical()
 		
 		commentUser({user_id: message.id}).then(data => {
 			if (data && !data.code) {
@@ -231,22 +236,20 @@ class Person extends React.Component {
 		}
 	};
 
-	confirm = () => {
+	confirm = (id) => {
 		const {
 			dispatch,
 			location: { query },
 		} = this.props;
 		dispatch({
 			type: 'blog/del',
-			payload: query.id,
+			payload: id,
 			callback: data => {
 				if (data && !data.code) {
 					notification.success({
 						message: '删除文章成功！',
 					});
-					setTimeout(function() {
-						router.push('/');
-					}, 1500);
+					this.getArtical()
 				} else {
 					notification.error({
 						message: data.msg,

@@ -47,37 +47,54 @@ export async function submitAndPay(params) {
 
 // blog 获取博客列表
 export async function getBlogList(params) {
-  return request(`/blog/example?${stringify(params)}`);
+  // return request(`/blog/example?${stringify(params)}`);
+  return request(`/blog/articals?${stringify(params)}`);
 }
 
 // blog 获取博客详情
 export async function getBlogDetail(id, params) {
-  return request(`/blog/details/${id}?${stringify(params)}`);
+  // return request(`/blog/details/${id}?${stringify(params)}`);
+  return request(`/blog/articals/${id}?${stringify(params)}`);
 }
 // blog 增加一条博客
 export async function addBlog(params) {
-  return request(`/blog/postexam`, {
+  // return request(`/blog/postexam`, {
+  //   method: 'POST',
+  //   body: params,
+  // });
+  return request(`/blog/articals`, {
     method: 'POST',
     body: params,
   });
 }
 
 
-export async function deleteBlog(id, params) {
-  return request(`/blog/delexam/${id}`, {
-    method: 'DELETE',
-    body: params,
-  });
-}
-
-
-//确认支付
+// 更新文章
 export async function updateBlog(params, id) {
-  return request(`/blog/putexam/${id}`, {
+  return request(`/blog/articals/${id}`, {
     method:'PUT',
     body: params,
   });
+  // return request(`/blog/putexam/${id}`, {
+  //   method:'PUT',
+  //   body: params,
+  // });
 }
+
+
+export async function deleteBlog(id, params) {
+  return request(`/blog/articals/${id}`, {
+    method: 'DELETE',
+    body: params,
+  });
+  // return request(`/blog/delexam/${id}`, {
+  //   method: 'DELETE',
+  //   body: params,
+  // });
+}
+
+
+
 
 
 
@@ -190,13 +207,11 @@ export async function getUserOfFollow(id) {
 
 // 获取游戏记录
 export async function getGameOfList(params) {
-  console.log(new Date().getTime(), 'list')
   return request(`/blog/record_list?${stringify(params)}`);
 }
 
 // 创建游戏记录
 export async function createGameRecord(params) {
-  console.log(new Date().getTime(), 'post')
   return request(`/blog/record`, {
     method: 'POST',
     body: params,
@@ -204,5 +219,32 @@ export async function createGameRecord(params) {
 }
 
 
+
+
+// 练习接口tutorial
+export async function getTest(params) {
+  return request(`/tutorial/snippets?${stringify(params)}`);
+}
+export async function getTestDetail(id) {
+  return request(`/tutorial/snippets/${id}`);
+}
+export async function createTest(params) {
+  return request(`/tutorial/snippets`, {
+    method: 'POST',
+    body: params,
+  });
+}
+export async function putTest(id, params) {
+  return request(`/tutorial/snippets/${id}`, {
+    method: 'PUT',
+    body: params,
+  });
+}
+export async function deleteTest(id) {
+  return request(`/tutorial/snippets/${id}`, {
+    method: 'DELETE',
+    body: {},
+  });
+}
 
 
