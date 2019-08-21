@@ -69,7 +69,8 @@ class Person extends React.Component {
 
 	getArtical = () => {
 		const { message } = this.props;
-		getUserArticals(message.id).then(data => {
+		// getUserArticals(message.id).then(data => {
+		getUserArticals({group: 'artical', id: message.id}).then(data => {
 			if (data && !data.code) {
 				this.setState({
 					list: data,
@@ -131,12 +132,13 @@ class Person extends React.Component {
 			}
 		});
 	}
+
 	handleSubmit = e => {
 		const { message, dispatch } = this.props;
 		e.preventDefault();
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (!err) {
-				// console.log('Received values of form: ', values);
+				console.log('Received values of form: ', values);
 				values.avatar = this.state.imageUrl;
 				updateUser(values, message.id).then(data => {
 					if (data && !data.code) {
@@ -345,7 +347,7 @@ class Person extends React.Component {
 						<span>{`${index + 1}、`}{item.word}</span>
 							{
 								item.to_comment ?
-								<Link to={`/people/${item.to_comment_dict.id}`}><span className={l.people}>@{item.to_comment_dict ? item.to_comment_dict.nickname : ''}</span></Link>
+								<Link to={`/people/${item.to_comment_dict.id}`}><span className={l.people}>{item.to_comment_dict ? '@' + item.to_comment_dict.nickname : ''}</span></Link>
 								: null
 							}
 							<span className={l.time}>{item.created_at ? moment(item.created_at).format('YYYY-MM-DD HH:mm') : ''}</span>

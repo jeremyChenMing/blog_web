@@ -33,7 +33,7 @@ class People extends React.Component {
 					});
 				}
 			});
-			getUserArticals(params.id).then(data => {
+			getUserArticals({group: 'artical', id: params.id}).then(data => {
 				if (data && !data.code) {
 					this.setState({
 						list: data,

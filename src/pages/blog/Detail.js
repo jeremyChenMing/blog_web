@@ -40,7 +40,6 @@ class Detail extends React.Component {
 					params: {login_id: message.id} 
 				},
 				callback: () => {
-					console.log('111')
 					this.setState({
 						show: true
 					})
