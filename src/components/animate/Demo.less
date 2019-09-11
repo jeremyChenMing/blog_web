@@ -105,6 +105,22 @@
 
 
 
+.kk{
+	padding-top: 150px;
+	height: 300px;
+	width: 100%;
+	& > img{
+		display: block;
+	}
+	& > img:nth-child(1){
+		// filter: blur(2px);
+		filter: opacity(100%);
+		transition: filter ease-in .2s;
+		&:hover{
+			filter: opacity(40%);
+		}
+	}
+}
 
 
 

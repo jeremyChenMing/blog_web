@@ -181,7 +181,7 @@ class BasicLayout extends React.Component {
   				<Layout>
   					<div className={l.header}>
   						<div className={l.inner}>
-  				      <Link className={l.img} to="/"><img src="/img/krhr.png" alt="logo" /></Link>
+  				      <Link className={l.img} to="/"><img src="/img/maps_13.png" alt="logo" /></Link>
                 <div className={l.middle}>
                   <Link to="/game">小游戏</Link>
                   <Link to="/animate">效果</Link>

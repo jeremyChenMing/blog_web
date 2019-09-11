@@ -73,8 +73,7 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setToken(payload.token);
-      delete payload.password;
+      setToken(payload.access);
       setUserInfo(payload);
       return {
         ...state,

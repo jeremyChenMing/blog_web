@@ -31,7 +31,7 @@ class Register extends React.Component {
 	componentDidMount() {
 		const { form: {setFieldsValue} } = this.props;
 		setFieldsValue({
-			user_name: '361196961@qq.com',
+			username: '361196961@qq.com',
 			nickname: '完美',
 			password: 123456,
 			confirm: 123456,
@@ -41,12 +41,22 @@ class Register extends React.Component {
 		})
 	}
 	handleSubmit = e => {
-		const { dispatch } = this.props;
+		const { dispatch, form: {setFields} } = this.props;
 		e.preventDefault();
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (!err) {
 				console.log('Received values of form: ', values);
+				if (!values.agree) {
+					setFields({
+            agree: {
+              value: values.agree,
+              errors: [new Error('请勾选该选项')],
+            },
+          });
+					return;
+				}
 				delete values.confirm;
+				delete values.agree;
 				dispatch({
 					type: 'login/create',
 					payload: values,
@@ -135,7 +145,7 @@ class Register extends React.Component {
 				<h2>注册用户</h2>
 				<Form className={l.register_form} {...formItemLayout} onSubmit={this.handleSubmit}>
 					<Form.Item label="用户名">
-						{getFieldDecorator('user_name', {
+						{getFieldDecorator('username', {
 							rules: [
 								{
 									type: 'email',

@@ -77,9 +77,9 @@ class Add extends React.Component {
 	        			notification.success({
 	        				message: '更新文章成功！'
 	        			})
-	        			// setTimeout(function () {
-	        			// 	router.push('/')
-	        			// },1500)
+	        			setTimeout(function () {
+	        				router.push('/')
+	        			},1500)
 	        		}else{
 	        			notification.error({
 	        				message: data.msg

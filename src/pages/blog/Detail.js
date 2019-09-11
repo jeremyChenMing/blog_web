@@ -5,7 +5,7 @@ import Link from 'umi/link';
 import moment from 'moment';
 import router from 'umi/router';
 import QueueAnim from 'rc-queue-anim';
-import { postFollow } from '@/services/api';
+import { postFollow, getFollowed } from '@/services/api';
 import 'braft-editor/dist/output.css'
 import BraftEditor from 'braft-editor'
 import { CLASSIFIYOBJS, AVATAR, DEFAULT } from '@/constants/Constants';
@@ -25,7 +25,21 @@ class Detail extends React.Component {
 		word: undefined,
 		replyValue: undefined,
 		show: false,
+		hasBeen: false
 	};
+
+	getFolloweds = async(id, follow) => {
+		try{
+			const result = await getFollowed(id, {id: follow});
+			if (!result.code) {
+				this.setState({
+					hasBeen: result.follow
+				})
+			}
+		}catch(err) {
+			console.log(err)
+		}
+	}
 	componentDidMount() {
 		const {
 			dispatch,
@@ -39,9 +53,12 @@ class Detail extends React.Component {
 					id: query.id,
 					params: {login_id: message.id} 
 				},
-				callback: () => {
+				callback: (data) => {
+					// console.log(data, '*&^%')
 					this.setState({
 						show: true
+					}, () => {
+						this.getFolloweds(data.user.id, message.id)
 					})
 				},
 			});
@@ -193,25 +210,12 @@ class Detail extends React.Component {
 
 
 	handleFollow = (followed, follower) => {
-		const {
-			dispatch,
-			location: { query },
-			message
-		} = this.props;
 		const para = {
-			followed_id: followed.user.id,
-			follower_id: follower.id,
+			follower: followed.user.id,
 		}
-		postFollow(para).then( data => {
+		postFollow(follower.id, para).then( data => {
 			if (data && !data.code) {
-				dispatch({
-					type: 'blog/details',
-					payload: { 
-						id: query.id,
-						params: {login_id: message.id}  
-					},
-					callback: () => {},
-				});
+				this.getFolloweds(followed.user.id, follower.id)
 			}
 		}).catch(err => {
 			console.log(err)
@@ -219,7 +223,7 @@ class Detail extends React.Component {
 	}
 
 	render() {
-		const { show } = this.state;
+		const { show, hasBeen } = this.state;
 		const {
 			blog: { detail },
 			list,
@@ -265,7 +269,7 @@ class Detail extends React.Component {
 							/>
 							<span><Link to={`/people/${detail.user ? detail.user.id : ''}`}> {detail.user ? detail.user.nickname : ''}</Link></span>
 							
-							{selfe ? <Tag onClick={this.handleFollow.bind(null, detail, message)} className={l.tags} color={detail.followed ? 'blue' : ''}>{detail.followed ? '取关' : '关注'}</Tag> : null}
+							{selfe ? <Tag onClick={this.handleFollow.bind(null, detail, message)} className={l.tags} color={hasBeen ? 'blue' : ''}>{hasBeen ? '取关' : '关注'}</Tag> : null}
 						</div>
 					</div>
 					<div className={l.content}>{this.renderDetail(detail.content)}</div>

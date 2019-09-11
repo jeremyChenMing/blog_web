@@ -88,7 +88,7 @@ export default function request(url, option) {
   };
 
   if (token && token !== 'undefined') {
-    defaultOptions['headers']['Authorization'] = `JWT ${JSON.parse(token)}`;
+    defaultOptions['headers']['Authorization'] = `Bearer ${JSON.parse(token)}`;
   }
   const newOptions = { ...defaultOptions, ...options };
   if (

@@ -31,12 +31,12 @@ export default class Demo extends React.Component {
 	}
 
 	componentDidMount() {
-		getTest({page: 2, page_size: 10}).then( data => {
-			console.log(data)
+		// getTest({page: 2, page_size: 10}).then( data => {
+		// 	console.log(data)
 
-		}).catch(err => {
-			console.log(err)
-		})
+		// }).catch(err => {
+		// 	console.log(err)
+		// })
 	}
 
 
@@ -155,6 +155,12 @@ export default class Demo extends React.Component {
 					相关内容
 					<Button onClick={this.handle}>发送接口</Button>
 					<Button onClick={this.handleDelete}>删除</Button>
+				</div>
+
+
+				<div className={l.kk}>
+					<img src="/banner/bangbao.png" alt="icon"/>
+					<img src="/banner/banner0.jpg" alt="icon"/>
 				</div>
 			</div>
 		);
