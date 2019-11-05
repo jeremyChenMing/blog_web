@@ -28,9 +28,9 @@ class Detail extends React.Component {
 		hasBeen: false
 	};
 
-	getFolloweds = async(id, follow) => {
+	getFolloweds = async(follow) => {
 		try{
-			const result = await getFollowed(id, {id: follow});
+			const result = await getFollowed({follower: follow});
 			if (!result.code) {
 				this.setState({
 					hasBeen: result.follow
@@ -46,19 +46,18 @@ class Detail extends React.Component {
 			location: { query },
 			message
 		} = this.props;
+		console.log(query, '*')
 		if (query.id) {
 			dispatch({
 				type: 'blog/details',
 				payload: { 
-					id: query.id,
-					params: {login_id: message.id} 
+					params: {artical_id: query.id} 
 				},
 				callback: (data) => {
-					// console.log(data, '*&^%')
 					this.setState({
 						show: true
 					}, () => {
-						this.getFolloweds(data.user.id, message.id)
+						this.getFolloweds(data.user.id)
 					})
 				},
 			});
@@ -101,8 +100,8 @@ class Detail extends React.Component {
 			type: 'comment/create',
 			payload: {
 				word,
-				belong_artical: detail.id,
-				belong_user: message.id,
+				belong_artical_id: detail.id,
+				belong_user_id: message.id,
 			},
 			callback: data => {
 				if (data && !data.code) {
@@ -144,7 +143,7 @@ class Detail extends React.Component {
 			location: { query },
 		} = this.props;
 		const { replyValue } = this.state;
-		console.log(obj, replyValue);
+		// console.log(obj, replyValue);
 
 		if (!message.id) {
 			// 没有登录，先去登陆
@@ -155,8 +154,8 @@ class Detail extends React.Component {
 			type: 'comment/create',
 			payload: {
 				word: replyValue,
-				belong_artical: detail.id,
-				belong_user: message.id,
+				belong_artical_id: detail.id,
+				belong_user_id: message.id,
 				to_comment: obj.id
 			},
 			callback: data => {
@@ -187,14 +186,16 @@ class Detail extends React.Component {
 			type: 'blog/nice',
 			payload: {
 				action: bool === '已赞' ? 'unlike' : 'like',
-				user_id: message.id,
+				// user_id: message.id,
 				artical_id: detail.id,
 			},
 			callback: (data) => {
 				if (data && !data.code) {
 					dispatch({
 						type: 'blog/details',
-						payload: { id: query.id },
+						payload: { 
+							params: {artical_id: query.id} 
+						},
 						callback: () => {},
 					});
 				}
@@ -213,9 +214,9 @@ class Detail extends React.Component {
 		const para = {
 			follower: followed.user.id,
 		}
-		postFollow(follower.id, para).then( data => {
+		postFollow(para).then( data => {
 			if (data && !data.code) {
-				this.getFolloweds(followed.user.id, follower.id)
+				this.getFolloweds(followed.user.id)
 			}
 		}).catch(err => {
 			console.log(err)

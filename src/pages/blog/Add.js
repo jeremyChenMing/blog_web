@@ -42,10 +42,13 @@ class Add extends React.Component {
 			location: { query },
 			form: { setFieldsValue }
 		} = this.props;
+		console.log(query, '****')
 		if (query.id) {
 			dispatch({
 				type: 'blog/details',
-				payload: {id: query.id},
+				payload: {
+					params: {artical_id: query.id} 
+				},
 				callback: (data) => {
 					setFieldsValue({
 						title: data.title,
@@ -63,15 +66,15 @@ class Add extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        values.user_id = this.props.message.id;
+        
+        values.artical_id = query.id;
         // values.content = values.content.toHTML()
         values.content = values.content.toRAW()
+        console.log('Received values of form: ', values);
         if (query.id) {
         	dispatch({
         		type: 'blog/edit',
         		payload: values,
-        		id: query.id,
         		callback: (data) => {
         			if (data && !data.code) {
 	        			notification.success({

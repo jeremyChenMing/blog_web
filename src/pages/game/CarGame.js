@@ -218,7 +218,7 @@ class CarGame extends React.Component {
 				if (user) {
 					this.handleAjax({
 						user_id: user,
-						kilometer: this.state.kilometer / 100,
+						kilometer: (this.state.kilometer / 100) | 0,
 					});
 				}
 				this.gameTick(false);

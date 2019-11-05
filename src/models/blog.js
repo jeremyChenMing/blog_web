@@ -64,7 +64,7 @@ export default {
         }
     },
     *details({ payload, callback }, { call, put }) {
-      const response = yield call(getBlogDetail, payload.id, payload.params);
+      const response = yield call(getBlogDetail, payload.params);
       if (response && !response.code) {
         yield put({
           type: 'detail',
@@ -78,11 +78,11 @@ export default {
       callback(response)
     },
     *del({ payload, callback }, { call, put }) {
-      const response = yield call(deleteBlog, payload, {});
+      const response = yield call(deleteBlog, payload);
       callback(response)
     },
     *edit({ payload, callback, id }, { call, put }) {
-      const response = yield call(updateBlog, payload, id);
+      const response = yield call(updateBlog, payload);
       callback(response)
     },
     // 点赞

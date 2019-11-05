@@ -141,6 +141,21 @@ export const myBrowser = () =>{
 }
 
 
+// 深克隆，采用递归
+function deepClones(prefix) {
+  let objs = Array.isArray(prefix) ? [] : [];
+  for(let n in prefix) {
+    const value = prefix[n]
+    if (value instanceof Array) {
+      objs[n] = deepClone(value)
+    }else if (value instanceof Object) {
+      objs[n] = deepClone(value)
+    }else{
+      objs[n] = value
+    }
+  }
+  return objs
+}
 
 
 export const normalizeWheel = (event) => {

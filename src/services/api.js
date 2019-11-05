@@ -26,13 +26,14 @@ export async function uploadFile(params) {
 // blog 获取博客列表
 export async function getBlogList(params) {
   // return request(`/blog/example?${stringify(params)}`);
-  return request(`/blog/articals?${stringify(params)}`);
+  // return request(`/blog/articals?${stringify(params)}`);
+  return request(`/blog/api/artical_list?${stringify(params)}`);
 }
 
 // blog 获取博客详情
-export async function getBlogDetail(id, params) {
+export async function getBlogDetail(params) {
   // return request(`/blog/details/${id}?${stringify(params)}`);
-  return request(`/blog/articals/${id}?${stringify(params)}`);
+  return request(`/blog/api/artical_list?${stringify(params)}`);
 }
 // blog 增加一条博客
 export async function addBlog(params) {
@@ -40,15 +41,15 @@ export async function addBlog(params) {
   //   method: 'POST',
   //   body: params,
   // });
-  return request(`/blog/articals`, {
+  return request(`/blog/api/artical`, {
     method: 'POST',
     body: params,
   });
 }
 
 // 更新一篇博客文章
-export async function updateBlog(params, id) {
-  return request(`/blog/articals/${id}`, {
+export async function updateBlog(params) {
+  return request(`/blog/api/artical`, {
     method:'PUT',
     body: params,
   });
@@ -58,9 +59,11 @@ export async function updateBlog(params, id) {
   // });
 }
 
+
+
 // 删除一条博客
-export async function deleteBlog(id, params) {
-  return request(`/blog/articals/${id}`, {
+export async function deleteBlog(params) {
+  return request(`/blog/api/artical`, {
     method: 'DELETE',
     body: params,
   });
@@ -73,7 +76,7 @@ export async function deleteBlog(id, params) {
 // 获取某一用户发表过的文章
 export async function getUserArticals(params) {
   // return request(`/blog/artical_list/${id}`);
-  return request(`/blog/articals?${stringify(params)}`);
+  return request(`/blog/api/artical_user?${stringify(params)}`);
 }
 
 
@@ -111,9 +114,32 @@ export async function updateUser(params) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 创建评论 create_comment
 export async function createComments(params) {
-  return request(`/blog/comment_info`, {
+  return request(`/blog/api/comment`, {
     method: 'POST',
     body: params,
   });
@@ -125,19 +151,19 @@ export async function createComments(params) {
 // 评论列表
 export async function commentList(params) {
   // return request(`/blog/comments?${stringify(params)}`);
-  return request(`/blog/comment_info?${stringify(params)}`);
+  return request(`/blog/api/comment_list?${stringify(params)}`);
 }
 // 关于个人的评论列表
 export async function commentUser(params) {
   // return request(`/blog/comments_user?${stringify(params)}`);
-  return request(`/blog/comment_info?${stringify(params)}`);
+  return request(`/blog/api/comment?${stringify(params)}`);
 }
 
 
 
 // 点赞
 export async function handleNice(params) {
-  return request(`/blog/nice`, {
+  return request(`/blog/api/nice`, {
     method: 'POST',
     body: params,
   });
@@ -147,8 +173,8 @@ export async function handleNice(params) {
   // });
 }
 // 获取个人下的点赞过的文章
-export async function getUserOfNice(id) {
-  return request(`/blog/nice_count/${id}`);
+export async function getUserOfNice() {
+  return request(`/blog/api/nice`);
   // return request(`/blog/get_nice/${id}`);
 }
 
@@ -157,8 +183,8 @@ export async function getUserOfNice(id) {
 
 
 // 关注
-export async function postFollow(id, params) {
-  return request(`/blog/followed/${id}`, {
+export async function postFollow(params) {
+  return request(`/blog/api/follow`, {
     method: 'POST',
     body: params,
   });
@@ -168,21 +194,17 @@ export async function postFollow(id, params) {
   // });
 }
 // 获取是否被关注
-export async function getFollowed(id, params) {
-  return request(`/blog/followed/${id}?${stringify(params)}`);
+export async function getFollowed(params) {
+  return request(`/blog/api/follow_list?${stringify(params)}`);
 }
 
 
-// 获取登录人的粉丝
-export async function getUserOfFan(id, params) {
-  return request(`/blog/friend/${id}?${stringify(params)}`);
+// 获取登录人的粉丝和关注的人
+export async function getUserOfFan(params) {
+  return request(`/blog/api/follower?${stringify(params)}`);
   // return request(`/blog/fans/${id}`);
 }
 
-// 获取登录人的关注
-export async function getUserOfFollow(id) {
-  return request(`/blog/followers/${id}`);
-}
 
 
 
@@ -190,12 +212,12 @@ export async function getUserOfFollow(id) {
 
 // 获取游戏记录
 export async function getGameOfList(params) {
-  return request(`/blog/record_list?${stringify(params)}`);
+  return request(`/blog/api/record_list?${stringify(params)}`);
 }
 
 // 创建游戏记录
 export async function createGameRecord(params) {
-  return request(`/blog/record`, {
+  return request(`/blog/api/record`, {
     method: 'POST',
     body: params,
   });
